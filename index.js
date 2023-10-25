@@ -20125,7 +20125,7 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
     if (!isFolder) {
       const jsonLogEntries = await execWithOutput("git", [
         "log",
-        '--pretty=format:"{""hash"":""%h"", ""subject"":""%s"", ""author"":""%an"", ""date"":""%ad""}"',
+        '--pretty=format:"{"hash":"%h", "subject":"%s", "author":"%an", "date":"%ad"}"',
         "--follow",
         "--",
         name
