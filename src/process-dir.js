@@ -29,8 +29,6 @@ export const processDir = async (
         name,
       ]);
 
-      core.info(`jsonLogEntries: ${jsonLogEntries}`);
-
       const fullJson = `[${jsonLogEntries}]`;
 
       core.info(`fullJson: ${fullJson}`);
@@ -77,7 +75,7 @@ export const processDir = async (
       if (shouldExcludePath(path, fullPathFoldersToIgnore, excludedGlobs)) {
         return null;
       }
-      const stats = getFileStats(path, isFolder);
+      const stats = await getFileStats(path, isFolder);
       core.info(`stats: ${stats}`);
       return stats;
     } catch (e) {

@@ -20131,7 +20131,6 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
         "--",
         name
       ]);
-      core2.info(`jsonLogEntries: ${jsonLogEntries}`);
       const fullJson = `[${jsonLogEntries}]`;
       core2.info(`fullJson: ${fullJson}`);
       return {
@@ -20170,7 +20169,7 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
       if (shouldExcludePath(path, fullPathFoldersToIgnore, excludedGlobs)) {
         return null;
       }
-      const stats = getFileStats(path, isFolder);
+      const stats = await getFileStats(path, isFolder);
       core2.info(`stats: ${stats}`);
       return stats;
     } catch (e3) {
