@@ -262,7 +262,7 @@ var require_io = __commonJS({
     var path = __importStar(require("path"));
     var util_1 = require("util");
     var ioUtil = __importStar(require_io_util());
-    var exec2 = util_1.promisify(childProcess.exec);
+    var exec3 = util_1.promisify(childProcess.exec);
     var execFile = util_1.promisify(childProcess.execFile);
     function cp2(source, dest, options = {}) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -321,11 +321,11 @@ var require_io = __commonJS({
           try {
             const cmdPath = ioUtil.getCmdPath();
             if (yield ioUtil.isDirectory(inputPath, true)) {
-              yield exec2(`${cmdPath} /s /c "rd /s /q "%inputPath%""`, {
+              yield exec3(`${cmdPath} /s /c "rd /s /q "%inputPath%""`, {
                 env: { inputPath }
               });
             } else {
-              yield exec2(`${cmdPath} /s /c "del /f /a "%inputPath%""`, {
+              yield exec3(`${cmdPath} /s /c "del /f /a "%inputPath%""`, {
                 env: { inputPath }
               });
             }
@@ -1021,7 +1021,7 @@ var require_exec = __commonJS({
     exports2.getExecOutput = exports2.exec = void 0;
     var string_decoder_1 = require("string_decoder");
     var tr = __importStar(require_toolrunner());
-    function exec2(commandLine, args, options) {
+    function exec3(commandLine, args, options) {
       return __awaiter(this, void 0, void 0, function* () {
         const commandArgs = tr.argStringToArray(commandLine);
         if (commandArgs.length === 0) {
@@ -1033,7 +1033,7 @@ var require_exec = __commonJS({
         return runner.exec();
       });
     }
-    exports2.exec = exec2;
+    exports2.exec = exec3;
     function getExecOutput(commandLine, args, options) {
       var _a, _b;
       return __awaiter(this, void 0, void 0, function* () {
@@ -1056,7 +1056,7 @@ var require_exec = __commonJS({
           }
         };
         const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
-        const exitCode = yield exec2(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+        const exitCode = yield exec3(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
         stdout += stdoutDecoder.end();
         stderr += stderrDecoder.end();
         return {
@@ -2315,12 +2315,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info2 = this._prepareRequest(verb, parsedUrl, headers);
+          let info3 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info2, data);
+            response = yield this.requestRaw(info3, data);
             if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -2330,7 +2330,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info2, data);
+                return authenticationHandler.handleAuthentication(this, info3, data);
               } else {
                 return response;
               }
@@ -2353,8 +2353,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info2, data);
+              info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info3, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -2375,7 +2375,7 @@ var require_lib = __commonJS({
         }
         this._disposed = true;
       }
-      requestRaw(info2, data) {
+      requestRaw(info3, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
             function callbackForResult(err, res2) {
@@ -2387,16 +2387,16 @@ var require_lib = __commonJS({
                 resolve(res2);
               }
             }
-            this.requestRawWithCallback(info2, data, callbackForResult);
+            this.requestRawWithCallback(info3, data, callbackForResult);
           });
         });
       }
-      requestRawWithCallback(info2, data, onResult) {
+      requestRawWithCallback(info3, data, onResult) {
         if (typeof data === "string") {
-          if (!info2.options.headers) {
-            info2.options.headers = {};
+          if (!info3.options.headers) {
+            info3.options.headers = {};
           }
-          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res2) {
@@ -2405,7 +2405,7 @@ var require_lib = __commonJS({
             onResult(err, res2);
           }
         }
-        const req = info2.httpModule.request(info2.options, (msg) => {
+        const req = info3.httpModule.request(info3.options, (msg) => {
           const res2 = new HttpClientResponse(msg);
           handleResult(void 0, res2);
         });
@@ -2417,7 +2417,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info2.options.path}`));
+          handleResult(new Error(`Request timeout: ${info3.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -2439,27 +2439,27 @@ var require_lib = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info2 = {};
-        info2.parsedUrl = requestUrl;
-        const usingSsl = info2.parsedUrl.protocol === "https:";
-        info2.httpModule = usingSsl ? https : http2;
+        const info3 = {};
+        info3.parsedUrl = requestUrl;
+        const usingSsl = info3.parsedUrl.protocol === "https:";
+        info3.httpModule = usingSsl ? https : http2;
         const defaultPort = usingSsl ? 443 : 80;
-        info2.options = {};
-        info2.options.host = info2.parsedUrl.hostname;
-        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
-        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
-        info2.options.method = method;
-        info2.options.headers = this._mergeHeaders(headers);
+        info3.options = {};
+        info3.options.host = info3.parsedUrl.hostname;
+        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
+        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
+        info3.options.method = method;
+        info3.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info2.options.headers["user-agent"] = this.userAgent;
+          info3.options.headers["user-agent"] = this.userAgent;
         }
-        info2.options.agent = this._getAgent(info2.parsedUrl);
+        info3.options.agent = this._getAgent(info3.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info2.options);
+            handler.prepareRequest(info3.options);
           }
         }
-        return info2;
+        return info3;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -3167,10 +3167,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
     exports2.notice = notice;
-    function info2(message) {
+    function info3(message) {
       process.stdout.write(message + os2.EOL);
     }
-    exports2.info = info2;
+    exports2.info = info3;
     function startGroup2(name) {
       command_1.issue("group", name);
     }
@@ -3562,10 +3562,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
     exports2.notice = notice;
-    function info2(message) {
+    function info3(message) {
       process.stdout.write(message + os2.EOL);
     }
-    exports2.info = info2;
+    exports2.info = info3;
     function startGroup2(name) {
       command_1.issue("group", name);
     }
@@ -3844,12 +3844,12 @@ var require_http_client = __commonJS({
           throw new Error("Client has already been disposed.");
         }
         let parsedUrl = new URL(requestUrl);
-        let info2 = this._prepareRequest(verb, parsedUrl, headers);
+        let info3 = this._prepareRequest(verb, parsedUrl, headers);
         let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1;
         let numTries = 0;
         let response;
         while (numTries < maxTries) {
-          response = await this.requestRaw(info2, data);
+          response = await this.requestRaw(info3, data);
           if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
             let authenticationHandler;
             for (let i = 0; i < this.handlers.length; i++) {
@@ -3859,7 +3859,7 @@ var require_http_client = __commonJS({
               }
             }
             if (authenticationHandler) {
-              return authenticationHandler.handleAuthentication(this, info2, data);
+              return authenticationHandler.handleAuthentication(this, info3, data);
             } else {
               return response;
             }
@@ -3882,8 +3882,8 @@ var require_http_client = __commonJS({
                 }
               }
             }
-            info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-            response = await this.requestRaw(info2, data);
+            info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+            response = await this.requestRaw(info3, data);
             redirectsRemaining--;
           }
           if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
@@ -3903,7 +3903,7 @@ var require_http_client = __commonJS({
         }
         this._disposed = true;
       }
-      requestRaw(info2, data) {
+      requestRaw(info3, data) {
         return new Promise((resolve, reject) => {
           let callbackForResult = function(err, res2) {
             if (err) {
@@ -3911,13 +3911,13 @@ var require_http_client = __commonJS({
             }
             resolve(res2);
           };
-          this.requestRawWithCallback(info2, data, callbackForResult);
+          this.requestRawWithCallback(info3, data, callbackForResult);
         });
       }
-      requestRawWithCallback(info2, data, onResult) {
+      requestRawWithCallback(info3, data, onResult) {
         let socket;
         if (typeof data === "string") {
-          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         let handleResult = (err, res2) => {
@@ -3926,7 +3926,7 @@ var require_http_client = __commonJS({
             onResult(err, res2);
           }
         };
-        let req = info2.httpModule.request(info2.options, (msg) => {
+        let req = info3.httpModule.request(info3.options, (msg) => {
           let res2 = new HttpClientResponse(msg);
           handleResult(null, res2);
         });
@@ -3937,7 +3937,7 @@ var require_http_client = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error("Request timeout: " + info2.options.path), null);
+          handleResult(new Error("Request timeout: " + info3.options.path), null);
         });
         req.on("error", function(err) {
           handleResult(err, null);
@@ -3959,27 +3959,27 @@ var require_http_client = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info2 = {};
-        info2.parsedUrl = requestUrl;
-        const usingSsl = info2.parsedUrl.protocol === "https:";
-        info2.httpModule = usingSsl ? https : http2;
+        const info3 = {};
+        info3.parsedUrl = requestUrl;
+        const usingSsl = info3.parsedUrl.protocol === "https:";
+        info3.httpModule = usingSsl ? https : http2;
         const defaultPort = usingSsl ? 443 : 80;
-        info2.options = {};
-        info2.options.host = info2.parsedUrl.hostname;
-        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
-        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
-        info2.options.method = method;
-        info2.options.headers = this._mergeHeaders(headers);
+        info3.options = {};
+        info3.options.host = info3.parsedUrl.hostname;
+        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
+        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
+        info3.options.method = method;
+        info3.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info2.options.headers["user-agent"] = this.userAgent;
+          info3.options.headers["user-agent"] = this.userAgent;
         }
-        info2.options.agent = this._getAgent(info2.parsedUrl);
+        info3.options.agent = this._getAgent(info3.parsedUrl);
         if (this.handlers) {
           this.handlers.forEach((handler) => {
-            handler.prepareRequest(info2.options);
+            handler.prepareRequest(info3.options);
           });
         }
-        return info2;
+        return info3;
       }
       _mergeHeaders(headers) {
         const lowercaseKeys = (obj) => Object.keys(obj).reduce((c3, k) => (c3[k.toLowerCase()] = obj[k], c3), {});
@@ -7832,7 +7832,7 @@ var require_requestUtils = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var utils_1 = require_utils3();
-    var core2 = __importStar(require_core2());
+    var core3 = __importStar(require_core2());
     var config_variables_1 = require_config_variables();
     function retry(name, operation, customErrorMessages, maxAttempts) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -7859,13 +7859,13 @@ var require_requestUtils = __commonJS({
             errorMessage = error.message;
           }
           if (!isRetryable) {
-            core2.info(`${name} - Error is not retryable`);
+            core3.info(`${name} - Error is not retryable`);
             if (response) {
               utils_1.displayHttpDiagnostics(response);
             }
             break;
           }
-          core2.info(`${name} - Attempt ${attempt} of ${maxAttempts} failed with error: ${errorMessage}`);
+          core3.info(`${name} - Attempt ${attempt} of ${maxAttempts} failed with error: ${errorMessage}`);
           yield utils_1.sleep(utils_1.getExponentialRetryTimeInMilliseconds(attempt));
           attempt++;
         }
@@ -7933,7 +7933,7 @@ var require_upload_http_client = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var fs4 = __importStar(require("fs"));
-    var core2 = __importStar(require_core2());
+    var core3 = __importStar(require_core2());
     var tmp = __importStar(require_tmp_promise());
     var stream = __importStar(require("stream"));
     var utils_1 = require_utils3();
@@ -7987,7 +7987,7 @@ var require_upload_http_client = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           const FILE_CONCURRENCY = config_variables_1.getUploadFileConcurrency();
           const MAX_CHUNK_SIZE = config_variables_1.getUploadChunkSize();
-          core2.debug(`File Concurrency: ${FILE_CONCURRENCY}, and Chunk Size: ${MAX_CHUNK_SIZE}`);
+          core3.debug(`File Concurrency: ${FILE_CONCURRENCY}, and Chunk Size: ${MAX_CHUNK_SIZE}`);
           const parameters = [];
           let continueOnError = true;
           if (options) {
@@ -8024,15 +8024,15 @@ var require_upload_http_client = __commonJS({
               }
               const startTime = perf_hooks_1.performance.now();
               const uploadFileResult = yield this.uploadFileAsync(index, currentFileParameters);
-              if (core2.isDebug()) {
-                core2.debug(`File: ${++completedFiles}/${filesToUpload.length}. ${currentFileParameters.file} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish upload`);
+              if (core3.isDebug()) {
+                core3.debug(`File: ${++completedFiles}/${filesToUpload.length}. ${currentFileParameters.file} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish upload`);
               }
               uploadFileSize += uploadFileResult.successfulUploadSize;
               totalFileSize += uploadFileResult.totalSize;
               if (uploadFileResult.isSuccess === false) {
                 failedItemsToReport.push(currentFileParameters.file);
                 if (!continueOnError) {
-                  core2.error(`aborting artifact upload`);
+                  core3.error(`aborting artifact upload`);
                   abortPendingFileUploads = true;
                 }
               }
@@ -8041,7 +8041,7 @@ var require_upload_http_client = __commonJS({
           })));
           this.statusReporter.stop();
           this.uploadHttpManager.disposeAndReplaceAllClients();
-          core2.info(`Total size of all the files uploaded is ${uploadFileSize} bytes`);
+          core3.info(`Total size of all the files uploaded is ${uploadFileSize} bytes`);
           return {
             uploadSize: uploadFileSize,
             totalSize: totalFileSize,
@@ -8076,7 +8076,7 @@ var require_upload_http_client = __commonJS({
             if (!result) {
               isUploadSuccessful = false;
               failedChunkSizes += uploadFileSize;
-              core2.warning(`Aborting upload for ${parameters.file} due to failure`);
+              core3.warning(`Aborting upload for ${parameters.file} due to failure`);
             }
             return {
               isSuccess: isUploadSuccessful,
@@ -8113,7 +8113,7 @@ var require_upload_http_client = __commonJS({
               if (!result) {
                 isUploadSuccessful = false;
                 failedChunkSizes += chunkSize;
-                core2.warning(`Aborting upload for ${parameters.file} due to failure`);
+                core3.warning(`Aborting upload for ${parameters.file} due to failure`);
                 abortFileUpload = true;
               }
             }
@@ -8141,7 +8141,7 @@ var require_upload_http_client = __commonJS({
               if (response) {
                 utils_1.displayHttpDiagnostics(response);
               }
-              core2.info(`Retry limit has been reached for chunk at offset ${start2} to ${resourceUrl}`);
+              core3.info(`Retry limit has been reached for chunk at offset ${start2} to ${resourceUrl}`);
               return true;
             }
             return false;
@@ -8149,14 +8149,14 @@ var require_upload_http_client = __commonJS({
           const backOff = (retryAfterValue) => __awaiter(this, void 0, void 0, function* () {
             this.uploadHttpManager.disposeAndReplaceClient(httpClientIndex);
             if (retryAfterValue) {
-              core2.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the upload`);
+              core3.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the upload`);
               yield utils_1.sleep(retryAfterValue);
             } else {
               const backoffTime = utils_1.getExponentialRetryTimeInMilliseconds(retryCount);
-              core2.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the upload at offset ${start2}`);
+              core3.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the upload at offset ${start2}`);
               yield utils_1.sleep(backoffTime);
             }
-            core2.info(`Finished backoff for retry #${retryCount}, continuing with upload`);
+            core3.info(`Finished backoff for retry #${retryCount}, continuing with upload`);
             return;
           });
           while (retryCount <= retryLimit) {
@@ -8164,7 +8164,7 @@ var require_upload_http_client = __commonJS({
             try {
               response = yield uploadChunkRequest();
             } catch (error) {
-              core2.info(`An error has been caught http-client index ${httpClientIndex}, retrying the upload`);
+              core3.info(`An error has been caught http-client index ${httpClientIndex}, retrying the upload`);
               console.log(error);
               if (incrementAndCheckRetryLimit()) {
                 return false;
@@ -8176,13 +8176,13 @@ var require_upload_http_client = __commonJS({
             if (utils_1.isSuccessStatusCode(response.message.statusCode)) {
               return true;
             } else if (utils_1.isRetryableStatusCode(response.message.statusCode)) {
-              core2.info(`A ${response.message.statusCode} status code has been received, will attempt to retry the upload`);
+              core3.info(`A ${response.message.statusCode} status code has been received, will attempt to retry the upload`);
               if (incrementAndCheckRetryLimit(response)) {
                 return false;
               }
               utils_1.isThrottledStatusCode(response.message.statusCode) ? yield backOff(utils_1.tryGetRetryAfterValueTimeInMilliseconds(response.message.headers)) : yield backOff();
             } else {
-              core2.error(`Unexpected response. Unable to upload chunk to ${resourceUrl}`);
+              core3.error(`Unexpected response. Unable to upload chunk to ${resourceUrl}`);
               utils_1.displayHttpDiagnostics(response);
               return false;
             }
@@ -8196,7 +8196,7 @@ var require_upload_http_client = __commonJS({
           resourceUrl.searchParams.append("artifactName", artifactName);
           const parameters = { Size: size };
           const data = JSON.stringify(parameters, null, 2);
-          core2.debug(`URL is ${resourceUrl.toString()}`);
+          core3.debug(`URL is ${resourceUrl.toString()}`);
           const client = this.uploadHttpManager.getClient(0);
           const headers = utils_1.getUploadHeaders("application/json", false);
           const customErrorMessages = new Map([
@@ -8209,7 +8209,7 @@ var require_upload_http_client = __commonJS({
             return client.patch(resourceUrl.toString(), data, headers);
           }), customErrorMessages);
           yield response.readBody();
-          core2.debug(`Artifact ${artifactName} has been successfully uploaded, total size in bytes: ${size}`);
+          core3.debug(`Artifact ${artifactName} has been successfully uploaded, total size in bytes: ${size}`);
         });
       }
     };
@@ -8262,7 +8262,7 @@ var require_download_http_client = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var fs4 = __importStar(require("fs"));
-    var core2 = __importStar(require_core2());
+    var core3 = __importStar(require_core2());
     var zlib = __importStar(require("zlib"));
     var utils_1 = require_utils3();
     var url_1 = require("url");
@@ -8304,11 +8304,11 @@ var require_download_http_client = __commonJS({
       downloadSingleArtifact(downloadItems) {
         return __awaiter(this, void 0, void 0, function* () {
           const DOWNLOAD_CONCURRENCY = config_variables_1.getDownloadFileConcurrency();
-          core2.debug(`Download file concurrency is set to ${DOWNLOAD_CONCURRENCY}`);
+          core3.debug(`Download file concurrency is set to ${DOWNLOAD_CONCURRENCY}`);
           const parallelDownloads = [...new Array(DOWNLOAD_CONCURRENCY).keys()];
           let currentFile = 0;
           let downloadedFiles = 0;
-          core2.info(`Total number of files that will be downloaded: ${downloadItems.length}`);
+          core3.info(`Total number of files that will be downloaded: ${downloadItems.length}`);
           this.statusReporter.setTotalNumberOfFilesToProcess(downloadItems.length);
           this.statusReporter.start();
           yield Promise.all(parallelDownloads.map((index) => __awaiter(this, void 0, void 0, function* () {
@@ -8317,8 +8317,8 @@ var require_download_http_client = __commonJS({
               currentFile += 1;
               const startTime = perf_hooks_1.performance.now();
               yield this.downloadIndividualFile(index, currentFileToDownload.sourceLocation, currentFileToDownload.targetPath);
-              if (core2.isDebug()) {
-                core2.debug(`File: ${++downloadedFiles}/${downloadItems.length}. ${currentFileToDownload.targetPath} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish downloading`);
+              if (core3.isDebug()) {
+                core3.debug(`File: ${++downloadedFiles}/${downloadItems.length}. ${currentFileToDownload.targetPath} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish downloading`);
               }
               this.statusReporter.incrementProcessedCount();
             }
@@ -8350,19 +8350,19 @@ var require_download_http_client = __commonJS({
             } else {
               this.downloadHttpManager.disposeAndReplaceClient(httpClientIndex);
               if (retryAfterValue) {
-                core2.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the download`);
+                core3.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the download`);
                 yield utils_1.sleep(retryAfterValue);
               } else {
                 const backoffTime = utils_1.getExponentialRetryTimeInMilliseconds(retryCount);
-                core2.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the download`);
+                core3.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the download`);
                 yield utils_1.sleep(backoffTime);
               }
-              core2.info(`Finished backoff for retry #${retryCount}, continuing with download`);
+              core3.info(`Finished backoff for retry #${retryCount}, continuing with download`);
             }
           });
           const isAllBytesReceived = (expected, received) => {
             if (!expected || !received || process.env["ACTIONS_ARTIFACT_SKIP_DOWNLOAD_VALIDATION"]) {
-              core2.info("Skipping download validation.");
+              core3.info("Skipping download validation.");
               return true;
             }
             return parseInt(expected) === received;
@@ -8376,11 +8376,11 @@ var require_download_http_client = __commonJS({
             let response;
             try {
               response = yield makeDownloadRequest();
-              if (core2.isDebug()) {
+              if (core3.isDebug()) {
                 utils_1.displayHttpDiagnostics(response);
               }
             } catch (error) {
-              core2.info("An error occurred while attempting to download a file");
+              core3.info("An error occurred while attempting to download a file");
               console.log(error);
               yield backOff();
               continue;
@@ -8400,7 +8400,7 @@ var require_download_http_client = __commonJS({
               }
             }
             if (forceRetry || utils_1.isRetryableStatusCode(response.message.statusCode)) {
-              core2.info(`A ${response.message.statusCode} response code has been received while attempting to download an artifact`);
+              core3.info(`A ${response.message.statusCode} response code has been received while attempting to download an artifact`);
               resetDestinationStream(downloadPath);
               utils_1.isThrottledStatusCode(response.message.statusCode) ? yield backOff(utils_1.tryGetRetryAfterValueTimeInMilliseconds(response.message.headers)) : yield backOff();
             } else {
@@ -8416,29 +8416,29 @@ var require_download_http_client = __commonJS({
             if (isGzip) {
               const gunzip = zlib.createGunzip();
               response.message.on("error", (error) => {
-                core2.error(`An error occurred while attempting to read the response stream`);
+                core3.error(`An error occurred while attempting to read the response stream`);
                 gunzip.close();
                 destinationStream.close();
                 reject(error);
               }).pipe(gunzip).on("error", (error) => {
-                core2.error(`An error occurred while attempting to decompress the response stream`);
+                core3.error(`An error occurred while attempting to decompress the response stream`);
                 destinationStream.close();
                 reject(error);
               }).pipe(destinationStream).on("close", () => {
                 resolve();
               }).on("error", (error) => {
-                core2.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
+                core3.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
                 reject(error);
               });
             } else {
               response.message.on("error", (error) => {
-                core2.error(`An error occurred while attempting to read the response stream`);
+                core3.error(`An error occurred while attempting to read the response stream`);
                 destinationStream.close();
                 reject(error);
               }).pipe(destinationStream).on("close", () => {
                 resolve();
               }).on("error", (error) => {
-                core2.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
+                core3.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
                 reject(error);
               });
             }
@@ -8545,7 +8545,7 @@ var require_artifact_client = __commonJS({
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var core2 = __importStar(require_core2());
+    var core3 = __importStar(require_core2());
     var upload_specification_1 = require_upload_specification();
     var upload_http_client_1 = require_upload_http_client();
     var utils_1 = require_utils3();
@@ -8569,17 +8569,17 @@ var require_artifact_client = __commonJS({
           };
           const uploadHttpClient = new upload_http_client_1.UploadHttpClient();
           if (uploadSpecification.length === 0) {
-            core2.warning(`No files found that can be uploaded`);
+            core3.warning(`No files found that can be uploaded`);
           } else {
             const response = yield uploadHttpClient.createArtifactInFileContainer(name, options);
             if (!response.fileContainerResourceUrl) {
-              core2.debug(response.toString());
+              core3.debug(response.toString());
               throw new Error("No URL provided by the Artifact Service to upload an artifact to");
             }
-            core2.debug(`Upload Resource URL: ${response.fileContainerResourceUrl}`);
+            core3.debug(`Upload Resource URL: ${response.fileContainerResourceUrl}`);
             const uploadResult = yield uploadHttpClient.uploadArtifactToFileContainer(response.fileContainerResourceUrl, uploadSpecification, options);
             yield uploadHttpClient.patchArtifactSize(uploadResult.totalSize, name);
-            core2.info(`Finished uploading artifact ${name}. Reported size is ${uploadResult.uploadSize} bytes. There were ${uploadResult.failedItems.length} items that failed to upload`);
+            core3.info(`Finished uploading artifact ${name}. Reported size is ${uploadResult.uploadSize} bytes. There were ${uploadResult.failedItems.length} items that failed to upload`);
             uploadResponse.artifactItems = uploadSpecification.map((item) => item.absoluteFilePath);
             uploadResponse.size = uploadResult.uploadSize;
             uploadResponse.failedItems = uploadResult.failedItems;
@@ -8608,10 +8608,10 @@ var require_artifact_client = __commonJS({
           path = path_1.resolve(path);
           const downloadSpecification = download_specification_1.getDownloadSpecification(name, items.value, path, (options === null || options === void 0 ? void 0 : options.createArtifactFolder) || false);
           if (downloadSpecification.filesToDownload.length === 0) {
-            core2.info(`No downloadable files were found for the artifact: ${artifactToDownload.name}`);
+            core3.info(`No downloadable files were found for the artifact: ${artifactToDownload.name}`);
           } else {
             yield utils_1.createDirectoriesForArtifact(downloadSpecification.directoryStructure);
-            core2.info("Directory structure has been setup for the artifact");
+            core3.info("Directory structure has been setup for the artifact");
             yield utils_1.createEmptyFilesForArtifact(downloadSpecification.emptyFilesToCreate);
             yield downloadHttpClient.downloadSingleArtifact(downloadSpecification.filesToDownload);
           }
@@ -8627,7 +8627,7 @@ var require_artifact_client = __commonJS({
           const response = [];
           const artifacts = yield downloadHttpClient.listArtifacts();
           if (artifacts.count === 0) {
-            core2.info("Unable to find any artifacts for the associated workflow");
+            core3.info("Unable to find any artifacts for the associated workflow");
             return response;
           }
           if (!path) {
@@ -8642,7 +8642,7 @@ var require_artifact_client = __commonJS({
             const items = yield downloadHttpClient.getContainerItems(currentArtifactToDownload.name, currentArtifactToDownload.fileContainerResourceUrl);
             const downloadSpecification = download_specification_1.getDownloadSpecification(currentArtifactToDownload.name, items.value, path, true);
             if (downloadSpecification.filesToDownload.length === 0) {
-              core2.info(`No downloadable files were found for any artifact ${currentArtifactToDownload.name}`);
+              core3.info(`No downloadable files were found for any artifact ${currentArtifactToDownload.name}`);
             } else {
               yield utils_1.createDirectoriesForArtifact(downloadSpecification.directoryStructure);
               yield utils_1.createEmptyFilesForArtifact(downloadSpecification.emptyFilesToCreate);
@@ -9238,10 +9238,10 @@ var require_react_development = __commonJS({
             isMounted: ["isMounted", "Instead, make sure to clean up subscriptions and pending requests in componentWillUnmount to prevent memory leaks."],
             replaceState: ["replaceState", "Refactor your code to use setState instead (see https://github.com/facebook/react/issues/3236)."]
           };
-          var defineDeprecationWarning = function(methodName, info2) {
+          var defineDeprecationWarning = function(methodName, info3) {
             Object.defineProperty(Component.prototype, methodName, {
               get: function() {
-                warn("%s(...) is deprecated in plain JavaScript React classes. %s", info2[0], info2[1]);
+                warn("%s(...) is deprecated in plain JavaScript React classes. %s", info3[0], info3[1]);
                 return void 0;
               }
             });
@@ -10363,14 +10363,14 @@ var require_react_development = __commonJS({
         }
         var ownerHasKeyUseWarning = {};
         function getCurrentComponentErrorInfo(parentType) {
-          var info2 = getDeclarationErrorAddendum();
-          if (!info2) {
+          var info3 = getDeclarationErrorAddendum();
+          if (!info3) {
             var parentName = typeof parentType === "string" ? parentType : parentType.displayName || parentType.name;
             if (parentName) {
-              info2 = "\n\nCheck the top-level render call using <" + parentName + ">.";
+              info3 = "\n\nCheck the top-level render call using <" + parentName + ">.";
             }
           }
-          return info2;
+          return info3;
         }
         function validateExplicitKey(element, parentType) {
           if (!element._store || element._store.validated || element.key != null) {
@@ -10471,15 +10471,15 @@ var require_react_development = __commonJS({
         function createElementWithValidation(type2, props2, children2) {
           var validType = isValidElementType(type2);
           if (!validType) {
-            var info2 = "";
+            var info3 = "";
             if (type2 === void 0 || typeof type2 === "object" && type2 !== null && Object.keys(type2).length === 0) {
-              info2 += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
+              info3 += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
             }
             var sourceInfo = getSourceInfoErrorAddendumForProps(props2);
             if (sourceInfo) {
-              info2 += sourceInfo;
+              info3 += sourceInfo;
             } else {
-              info2 += getDeclarationErrorAddendum();
+              info3 += getDeclarationErrorAddendum();
             }
             var typeString;
             if (type2 === null) {
@@ -10488,12 +10488,12 @@ var require_react_development = __commonJS({
               typeString = "array";
             } else if (type2 !== void 0 && type2.$$typeof === REACT_ELEMENT_TYPE) {
               typeString = "<" + (getComponentName(type2.type) || "Unknown") + " />";
-              info2 = " Did you accidentally export a JSX literal instead of a component?";
+              info3 = " Did you accidentally export a JSX literal instead of a component?";
             } else {
               typeString = typeof type2;
             }
             {
-              error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info2);
+              error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info3);
             }
           }
           var element = createElement.apply(this, arguments);
@@ -14644,20 +14644,20 @@ var require_react_dom_server_node_development = __commonJS({
                   }
                 }
               }
-              var info2 = "";
+              var info3 = "";
               {
                 var owner = nextElement._owner;
                 if (elementType === void 0 || typeof elementType === "object" && elementType !== null && Object.keys(elementType).length === 0) {
-                  info2 += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
+                  info3 += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
                 }
                 var ownerName = owner ? getComponentName(owner) : null;
                 if (ownerName) {
-                  info2 += "\n\nCheck the render method of `" + ownerName + "`.";
+                  info3 += "\n\nCheck the render method of `" + ownerName + "`.";
                 }
               }
               {
                 {
-                  throw Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: " + (elementType == null ? elementType : typeof elementType) + "." + info2);
+                  throw Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: " + (elementType == null ? elementType : typeof elementType) + "." + info3);
                 }
               }
             }
@@ -20063,8 +20063,8 @@ var require_uniqueId = __commonJS({
 });
 
 // src/index.jsx
-var import_exec = __toModule(require_exec());
-var core = __toModule(require_core());
+var import_exec2 = __toModule(require_exec());
+var core2 = __toModule(require_core());
 var artifact = __toModule(require_artifact_client2());
 var import_react3 = __toModule(require_react());
 var import_server = __toModule(require_server());
@@ -20089,19 +20089,54 @@ var processPath = (path) => {
   return path;
 };
 
+// src/execWithOutput.jsx
+var import_exec = __toModule(require_exec());
+var core = __toModule(require_core());
+function execWithOutput(command2, args) {
+  return new Promise((resolve, reject) => {
+    try {
+      (0, import_exec.exec)(command2, args, {
+        listeners: {
+          stdout: function(res2) {
+            core.info(res2.toString());
+            resolve(res2.toString());
+          },
+          stderr: function(res2) {
+            core.info(res2.toString());
+            reject(res2.toString());
+          }
+        }
+      });
+    } catch (e3) {
+      reject(e3);
+    }
+  });
+}
+
 // src/process-dir.js
 var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) => {
   const foldersToIgnore = [".git", ...excludedPaths];
   const fullPathFoldersToIgnore = new Set(foldersToIgnore.map((d2) => nodePath.join(rootPath, d2)));
-  const getFileStats = async (path = "") => {
+  const getFileStats = async (path = "", isFolder = true) => {
     const stats = await import_fs.default.statSync(`./${path}`);
     const name = path.split("/").filter(Boolean).slice(-1)[0];
     const size = stats.size;
     const relativePath = path.slice(rootPath.length + 1);
+    if (!isFolder) {
+      const jsonLogEntries = await execWithOutput("git", [
+        "log",
+        '--pretty=format:"{""hash"":""%h"", ""subject"":""%s"", ""author"":""%an"", ""date"":""%ad""}"',
+        "--follow",
+        "--",
+        name
+      ]);
+      const fullJson2 = `[${jsonLogEntries}]`;
+    }
     return {
       name,
       path: relativePath,
-      size
+      size,
+      commits: JSON.parse(fullJson)
     };
   };
   const addItemToTree = async (path = "", isFolder = true) => {
@@ -20115,18 +20150,18 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
           if (shouldExcludePath(fullPath, fullPathFoldersToIgnore, excludedGlobs)) {
             continue;
           }
-          const info2 = import_fs.default.statSync(`./${fullPath}`);
-          const stats3 = await addItemToTree(fullPath, info2.isDirectory());
+          const info3 = import_fs.default.statSync(`./${fullPath}`);
+          const stats3 = await addItemToTree(fullPath, info3.isDirectory());
           if (stats3)
             children2.push(stats3);
         }
-        const stats2 = await getFileStats(path);
+        const stats2 = await getFileStats(path, isFolder);
         return { ...stats2, children: children2 };
       }
       if (shouldExcludePath(path, fullPathFoldersToIgnore, excludedGlobs)) {
         return null;
       }
-      const stats = getFileStats(path);
+      const stats = getFileStats(path, isFolder);
       return stats;
     } catch (e3) {
       console.log("Issue trying to read file", path, e3);
@@ -27842,36 +27877,36 @@ var getSortOrder = (item, cachedOrders, i = 0) => {
 
 // src/index.jsx
 var main = async () => {
-  core.info("[INFO] Usage https://github.com/githubocto/repo-visualizer#readme");
-  core.startGroup("Configuration");
+  core2.info("[INFO] Usage https://github.com/kerry-patrick-il/repo-visualizer#readme");
+  core2.startGroup("Configuration");
   const username = "repo-visualizer";
-  await (0, import_exec.exec)("git", ["config", "user.name", username]);
-  await (0, import_exec.exec)("git", [
+  await (0, import_exec2.exec)("git", ["config", "user.name", username]);
+  await (0, import_exec2.exec)("git", [
     "config",
     "user.email",
     `${username}@users.noreply.github.com`
   ]);
-  core.endGroup();
-  const rootPath = core.getInput("root_path") || "";
-  const maxDepth = core.getInput("max_depth") || 9;
-  const customFileColors = JSON.parse(core.getInput("file_colors") || "{}");
-  const colorEncoding = core.getInput("color_encoding") || "type";
-  const commitMessage = core.getInput("commit_message") || "Repo visualizer: update diagram";
-  const excludedPathsString = core.getInput("excluded_paths") || "node_modules,bower_components,dist,out,build,eject,.next,.netlify,.yarn,.git,.vscode,package-lock.json,yarn.lock";
+  core2.endGroup();
+  const rootPath = core2.getInput("root_path") || "";
+  const maxDepth = core2.getInput("max_depth") || 9;
+  const customFileColors = JSON.parse(core2.getInput("file_colors") || "{}");
+  const colorEncoding = core2.getInput("color_encoding") || "type";
+  const commitMessage = core2.getInput("commit_message") || "Repo visualizer: update diagram";
+  const excludedPathsString = core2.getInput("excluded_paths") || "node_modules,bower_components,dist,out,build,eject,.next,.netlify,.yarn,.git,.vscode,package-lock.json,yarn.lock";
   const excludedPaths = excludedPathsString.split(",").map((str) => str.trim());
-  const excludedGlobsString = core.getInput("excluded_globs") || "";
+  const excludedGlobsString = core2.getInput("excluded_globs") || "";
   const excludedGlobs = excludedGlobsString.split(";");
-  const branch = core.getInput("branch");
+  const branch = core2.getInput("branch");
   const data = await processDir(rootPath, excludedPaths, excludedGlobs);
   let doesBranchExist = true;
   if (branch) {
-    await (0, import_exec.exec)("git", ["fetch"]);
+    await (0, import_exec2.exec)("git", ["fetch"]);
     try {
-      await (0, import_exec.exec)("git", ["switch", "-c", branch, "--track", `origin/${branch}`]);
+      await (0, import_exec2.exec)("git", ["switch", "-c", branch, "--track", `origin/${branch}`]);
     } catch {
       doesBranchExist = false;
-      core.info(`Branch ${branch} does not yet exist, creating ${branch}.`);
-      await (0, import_exec.exec)("git", ["checkout", "-b", branch]);
+      core2.info(`Branch ${branch} does not yet exist, creating ${branch}.`);
+      await (0, import_exec2.exec)("git", ["checkout", "-b", branch]);
     }
   }
   const componentCodeString = import_server.default.renderToStaticMarkup(/* @__PURE__ */ import_react3.default.createElement(Tree, {
@@ -27880,65 +27915,45 @@ var main = async () => {
     colorEncoding,
     customFileColors
   }));
-  const outputFile = core.getInput("output_file") || "./diagram.svg";
-  core.setOutput("svg", componentCodeString);
+  const outputFile = core2.getInput("output_file") || "./diagram.svg";
+  core2.setOutput("svg", componentCodeString);
   await import_fs2.default.writeFileSync(outputFile, componentCodeString);
-  await (0, import_exec.exec)("git", ["add", outputFile]);
+  await (0, import_exec2.exec)("git", ["add", outputFile]);
   const diff = await execWithOutput("git", ["status", "--porcelain", outputFile]);
-  core.info(`diff: ${diff}`);
+  core2.info(`diff: ${diff}`);
   if (!diff) {
-    core.info("[INFO] No changes to the repo detected, exiting");
+    core2.info("[INFO] No changes to the repo detected, exiting");
     return;
   }
-  const shouldPush = core.getBooleanInput("should_push");
+  const shouldPush = core2.getBooleanInput("should_push");
   if (shouldPush) {
-    core.startGroup("Commit and push diagram");
-    await (0, import_exec.exec)("git", ["commit", "-m", commitMessage]);
+    core2.startGroup("Commit and push diagram");
+    await (0, import_exec2.exec)("git", ["commit", "-m", commitMessage]);
     if (doesBranchExist) {
-      await (0, import_exec.exec)("git", ["push"]);
+      await (0, import_exec2.exec)("git", ["push"]);
     } else {
-      await (0, import_exec.exec)("git", ["push", "--set-upstream", "origin", branch]);
+      await (0, import_exec2.exec)("git", ["push", "--set-upstream", "origin", branch]);
     }
     if (branch) {
-      await (0, import_exec.exec)("git", "checkout", "-");
+      await (0, import_exec2.exec)("git", "checkout", "-");
     }
-    core.endGroup();
+    core2.endGroup();
   }
-  const shouldUpload = core.getInput("artifact_name") !== "";
+  const shouldUpload = core2.getInput("artifact_name") !== "";
   if (shouldUpload) {
-    core.startGroup("Upload diagram to artifacts");
+    core2.startGroup("Upload diagram to artifacts");
     const client = artifact.create();
-    const result = await client.uploadArtifact(core.getInput("artifact_name"), [outputFile], ".");
+    const result = await client.uploadArtifact(core2.getInput("artifact_name"), [outputFile], ".");
     if (result.failedItems.length > 0) {
       throw "Artifact was not uploaded successfully.";
     }
-    core.endGroup();
+    core2.endGroup();
   }
   console.log("All set!");
 };
 main().catch((e3) => {
-  core.setFailed(e3);
+  core2.setFailed(e3);
 });
-function execWithOutput(command2, args) {
-  return new Promise((resolve, reject) => {
-    try {
-      (0, import_exec.exec)(command2, args, {
-        listeners: {
-          stdout: function(res2) {
-            core.info(res2.toString());
-            resolve(res2.toString());
-          },
-          stderr: function(res2) {
-            core.info(res2.toString());
-            reject(res2.toString());
-          }
-        }
-      });
-    } catch (e3) {
-      reject(e3);
-    }
-  });
-}
 /*
 object-assign
 (c) Sindre Sorhus

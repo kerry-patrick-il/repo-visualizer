@@ -7,9 +7,10 @@ import fs from "fs"
 
 import { processDir } from "./process-dir.js"
 import { Tree } from "./Tree.tsx"
+import { execWithOutput } from './execWithOutput.jsx';
 
 const main = async () => {
-  core.info('[INFO] Usage https://github.com/githubocto/repo-visualizer#readme')
+  core.info('[INFO] Usage https://github.com/kerry-patrick-il/repo-visualizer#readme')
 
   core.startGroup('Configuration')
   const username = 'repo-visualizer'
@@ -52,7 +53,7 @@ const main = async () => {
     }
   }
   const componentCodeString = ReactDOMServer.renderToStaticMarkup(
-    <Tree data={data} maxDepth={+maxDepth} colorEncoding={colorEncoding} customFileColors={customFileColors}/>
+    <Tree data={data} maxDepth={+maxDepth} colorEncoding={colorEncoding} customFileColors={customFileColors} />
   );
 
   const outputFile = core.getInput("output_file") || "./diagram.svg"
@@ -105,23 +106,4 @@ main().catch((e) => {
   core.setFailed(e)
 })
 
-function execWithOutput(command, args) {
-  return new Promise((resolve, reject) => {
-    try {
-      exec(command, args, {
-        listeners: {
-          stdout: function (res) {
-            core.info(res.toString())
-            resolve(res.toString())
-          },
-          stderr: function (res) {
-            core.info(res.toString())
-            reject(res.toString())
-          }
-        }
-      })
-    } catch (e) {
-      reject(e)
-    }
-  })
-}
+
