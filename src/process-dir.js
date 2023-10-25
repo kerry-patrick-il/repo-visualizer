@@ -78,6 +78,7 @@ export const processDir = async (
         return null;
       }
       const stats = getFileStats(path, isFolder);
+      core.info(`stats: ${stats}`);
       return stats;
     } catch (e) {
       console.log("Issue trying to read file", path, e);

@@ -20171,6 +20171,7 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
         return null;
       }
       const stats = getFileStats(path, isFolder);
+      core2.info(`stats: ${stats}`);
       return stats;
     } catch (e3) {
       console.log("Issue trying to read file", path, e3);
