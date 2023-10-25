@@ -52,6 +52,9 @@ const main = async () => {
       await exec('git', ['checkout', '-b', branch])
     }
   }
+
+  core.info(`data: ${JSON.stringify(data)}`);
+  
   const componentCodeString = ReactDOMServer.renderToStaticMarkup(
     <Tree data={data} maxDepth={+maxDepth} colorEncoding={colorEncoding} customFileColors={customFileColors} />
   );

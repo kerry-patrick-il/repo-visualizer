@@ -2,7 +2,6 @@ import fs from "fs";
 import * as nodePath from "path";
 import { shouldExcludePath } from "./should-exclude-path";
 import { execWithOutput } from "./execWithOutput.jsx";
-import * as core from "@actions/core";
 
 export const processDir = async (
   rootPath = "",
@@ -30,8 +29,6 @@ export const processDir = async (
       ]);
 
       const fullJson = `[${jsonLogEntries}]`;
-
-      core.info(`fullJson: ${fullJson}`);
 
       return {
         name,
@@ -76,7 +73,6 @@ export const processDir = async (
         return null;
       }
       const stats = await getFileStats(path, isFolder);
-      core.info(`stats: ${stats}`);
       return stats;
     } catch (e) {
       console.log("Issue trying to read file", path, e);
