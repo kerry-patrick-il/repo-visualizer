@@ -1,7 +1,7 @@
 import fs from "fs";
 import * as nodePath from "path";
 import { shouldExcludePath } from "./should-exclude-path";
-import { execWithOutput } from './execWithOutput.jsx';
+import { execWithOutput } from "./execWithOutput.jsx";
 
 export const processDir = async (
   rootPath = "",
@@ -29,15 +29,19 @@ export const processDir = async (
       ]);
 
       const fullJson = `[${jsonLogEntries}]`;
-      
+      return {
+        name,
+        path: relativePath,
+        size,
+        commits: JSON.parse(fullJson),
+      };
+    } else {
+      return {
+        name,
+        path: relativePath,
+        size,
+      };
     }
-
-    return {
-      name,
-      path: relativePath,
-      size,
-      commits: JSON.parse(fullJson)
-    };
   };
   const addItemToTree = async (path = "", isFolder = true) => {
     try {

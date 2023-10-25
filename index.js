@@ -20130,14 +20130,20 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
         "--",
         name
       ]);
-      const fullJson2 = `[${jsonLogEntries}]`;
+      const fullJson = `[${jsonLogEntries}]`;
+      return {
+        name,
+        path: relativePath,
+        size,
+        commits: JSON.parse(fullJson)
+      };
+    } else {
+      return {
+        name,
+        path: relativePath,
+        size
+      };
     }
-    return {
-      name,
-      path: relativePath,
-      size,
-      commits: JSON.parse(fullJson)
-    };
   };
   const addItemToTree = async (path = "", isFolder = true) => {
     try {
