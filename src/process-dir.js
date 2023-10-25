@@ -2,6 +2,7 @@ import fs from "fs";
 import * as nodePath from "path";
 import { shouldExcludePath } from "./should-exclude-path";
 import { execWithOutput } from "./execWithOutput.jsx";
+import * as core from "@actions/core";
 
 export const processDir = async (
   rootPath = "",
@@ -22,13 +23,18 @@ export const processDir = async (
     if (!isFolder) {
       const jsonLogEntries = await execWithOutput("git", [
         "log",
-        '--pretty=format:"{"hash":"%h", "subject":"%s", "author":"%an", "date":"%ad"}"',
+        '--pretty=format:"{""hash"":""%h"", ""subject"":""%s"", ""author"":""%an"", ""date"":""%ad""}"',
         "--follow",
         "--",
         name,
       ]);
 
+      core.info(`jsonLogEntries: ${jsonLogEntries}`);
+
       const fullJson = `[${jsonLogEntries}]`;
+
+      core.info(`fullJson: ${fullJson}`);
+
       return {
         name,
         path: relativePath,
