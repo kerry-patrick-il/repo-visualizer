@@ -27,7 +27,7 @@ export const processDir = async (
           '--pretty=format:{"hash":"%h", "subject":"%s", "author":"%an", "date":"%ad"}',
           "--follow",
           "--",
-          relativePath,
+          path,
         ]);
 
         const fullJson = `[${jsonLogEntries}]`;
