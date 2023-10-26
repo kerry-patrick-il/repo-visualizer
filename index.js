@@ -823,7 +823,7 @@ var require_toolrunner = __commonJS({
               this._debug(`STDIO streams have closed for tool '${this.toolPath}'`);
               state.CheckComplete();
             });
-            state.on("done", (error, exitCode) => {
+            state.on("done", (error2, exitCode) => {
               if (stdbuffer.length > 0) {
                 this.emit("stdline", stdbuffer);
               }
@@ -831,8 +831,8 @@ var require_toolrunner = __commonJS({
                 this.emit("errline", errbuffer);
               }
               cp2.removeAllListeners();
-              if (error) {
-                reject(error);
+              if (error2) {
+                reject(error2);
               } else {
                 resolve(exitCode);
               }
@@ -927,14 +927,14 @@ var require_toolrunner = __commonJS({
         this.emit("debug", message);
       }
       _setResult() {
-        let error;
+        let error2;
         if (this.processExited) {
           if (this.processError) {
-            error = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
+            error2 = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
           } else if (this.processExitCode !== 0 && !this.options.ignoreReturnCode) {
-            error = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
+            error2 = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
           } else if (this.processStderr && this.options.failOnStdErr) {
-            error = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
+            error2 = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
           }
         }
         if (this.timeout) {
@@ -942,7 +942,7 @@ var require_toolrunner = __commonJS({
           this.timeout = null;
         }
         this.done = true;
-        this.emit("done", error, this.processExitCode);
+        this.emit("done", error2, this.processExitCode);
       }
       static HandleTimeout(state) {
         if (state.done) {
@@ -1935,18 +1935,18 @@ var require_tunnel = __commonJS({
         if (res2.statusCode !== 200) {
           debug("tunneling socket could not be established, statusCode=%d", res2.statusCode);
           socket.destroy();
-          var error = new Error("tunneling socket could not be established, statusCode=" + res2.statusCode);
-          error.code = "ECONNRESET";
-          options.request.emit("error", error);
+          var error2 = new Error("tunneling socket could not be established, statusCode=" + res2.statusCode);
+          error2.code = "ECONNRESET";
+          options.request.emit("error", error2);
           self3.removeSocket(placeholder);
           return;
         }
         if (head.length > 0) {
           debug("got illegal response body from proxy");
           socket.destroy();
-          var error = new Error("got illegal response body from proxy");
-          error.code = "ECONNRESET";
-          options.request.emit("error", error);
+          var error2 = new Error("got illegal response body from proxy");
+          error2.code = "ECONNRESET";
+          options.request.emit("error", error2);
           self3.removeSocket(placeholder);
           return;
         }
@@ -1957,9 +1957,9 @@ var require_tunnel = __commonJS({
       function onError(cause) {
         connectReq.removeAllListeners();
         debug("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
-        var error = new Error("tunneling socket could not be established, cause=" + cause.message);
-        error.code = "ECONNRESET";
-        options.request.emit("error", error);
+        var error2 = new Error("tunneling socket could not be established, cause=" + cause.message);
+        error2.code = "ECONNRESET";
+        options.request.emit("error", error2);
         self3.removeSocket(placeholder);
       }
     };
@@ -2751,12 +2751,12 @@ var require_oidc_utils = __commonJS({
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
           const httpclient = OidcClient.createHttpClient();
-          const res2 = yield httpclient.getJson(id_token_url).catch((error) => {
+          const res2 = yield httpclient.getJson(id_token_url).catch((error2) => {
             throw new Error(`Failed to get ID Token. 
  
-        Error Code : ${error.statusCode}
+        Error Code : ${error2.statusCode}
  
-        Error Message: ${error.result.message}`);
+        Error Message: ${error2.result.message}`);
           });
           const id_token = (_a = res2.result) === null || _a === void 0 ? void 0 : _a.value;
           if (!id_token) {
@@ -2777,8 +2777,8 @@ var require_oidc_utils = __commonJS({
             const id_token = yield OidcClient.getCall(id_token_url);
             core_1.setSecret(id_token);
             return id_token;
-          } catch (error) {
-            throw new Error(`Error message: ${error.message}`);
+          } catch (error2) {
+            throw new Error(`Error message: ${error2.message}`);
           }
         });
       }
@@ -3144,7 +3144,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     exports2.setCommandEcho = setCommandEcho;
     function setFailed2(message) {
       process.exitCode = ExitCode.Failure;
-      error(message);
+      error2(message);
     }
     exports2.setFailed = setFailed2;
     function isDebug() {
@@ -3155,10 +3155,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("debug", {}, message);
     }
     exports2.debug = debug;
-    function error(message, properties2 = {}) {
+    function error2(message, properties2 = {}) {
       command_1.issueCommand("error", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
-    exports2.error = error;
+    exports2.error = error2;
     function warning(message, properties2 = {}) {
       command_1.issueCommand("warning", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
@@ -3539,7 +3539,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     exports2.setCommandEcho = setCommandEcho;
     function setFailed2(message) {
       process.exitCode = ExitCode.Failure;
-      error(message);
+      error2(message);
     }
     exports2.setFailed = setFailed2;
     function isDebug() {
@@ -3550,10 +3550,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("debug", {}, message);
     }
     exports2.debug = debug;
-    function error(message, properties2 = {}) {
+    function error2(message, properties2 = {}) {
       command_1.issueCommand("error", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
-    exports2.error = error;
+    exports2.error = error2;
     function warning(message, properties2 = {}) {
       command_1.issueCommand("warning", utils_1.toCommandProperties(properties2), message instanceof Error ? message.toString() : message);
     }
@@ -6112,10 +6112,10 @@ var require_sync = __commonJS({
           var abs = this._makeAbs(f2);
           this.cache[abs] = "FILE";
           if (abs === this.cwdAbs) {
-            var error = new Error(er.code + " invalid cwd " + this.cwd);
-            error.path = this.cwd;
-            error.code = er.code;
-            throw error;
+            var error2 = new Error(er.code + " invalid cwd " + this.cwd);
+            error2.path = this.cwd;
+            error2.code = er.code;
+            throw error2;
           }
           break;
         case "ENOENT":
@@ -6763,10 +6763,10 @@ var require_glob = __commonJS({
           var abs = this._makeAbs(f2);
           this.cache[abs] = "FILE";
           if (abs === this.cwdAbs) {
-            var error = new Error(er.code + " invalid cwd " + this.cwd);
-            error.path = this.cwd;
-            error.code = er.code;
-            this.emit("error", error);
+            var error2 = new Error(er.code + " invalid cwd " + this.cwd);
+            error2.path = this.cwd;
+            error2.code = er.code;
+            this.emit("error", error2);
             this.abort();
           }
           break;
@@ -7461,14 +7461,14 @@ var require_tmp = __commonJS({
         }
       }
     }
-    function isEBADF(error) {
-      return isExpectedError(error, -EBADF, "EBADF");
+    function isEBADF(error2) {
+      return isExpectedError(error2, -EBADF, "EBADF");
     }
-    function isENOENT(error) {
-      return isExpectedError(error, -ENOENT, "ENOENT");
+    function isENOENT(error2) {
+      return isExpectedError(error2, -ENOENT, "ENOENT");
     }
-    function isExpectedError(error, code, errno) {
-      return error.code === code || error.code === errno;
+    function isExpectedError(error2, code, errno) {
+      return error2.code === code || error2.code === errno;
     }
     function isBlank(s) {
       return s === null || s === void 0 || !s.trim();
@@ -7747,8 +7747,8 @@ var require_upload_gzip = __commonJS({
             const size = (yield stat(tempFilePath)).size;
             resolve(size);
           }));
-          outputStream.on("error", (error) => {
-            console.log(error);
+          outputStream.on("error", (error2) => {
+            console.log(error2);
             reject;
           });
         });
@@ -7832,7 +7832,7 @@ var require_requestUtils = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var utils_1 = require_utils3();
-    var core3 = __importStar(require_core2());
+    var core4 = __importStar(require_core2());
     var config_variables_1 = require_config_variables();
     function retry(name, operation, customErrorMessages, maxAttempts) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -7854,18 +7854,18 @@ var require_requestUtils = __commonJS({
             }
             isRetryable = utils_1.isRetryableStatusCode(statusCode);
             errorMessage = `Artifact service responded with ${statusCode}`;
-          } catch (error) {
+          } catch (error2) {
             isRetryable = true;
-            errorMessage = error.message;
+            errorMessage = error2.message;
           }
           if (!isRetryable) {
-            core3.info(`${name} - Error is not retryable`);
+            core4.info(`${name} - Error is not retryable`);
             if (response) {
               utils_1.displayHttpDiagnostics(response);
             }
             break;
           }
-          core3.info(`${name} - Attempt ${attempt} of ${maxAttempts} failed with error: ${errorMessage}`);
+          core4.info(`${name} - Attempt ${attempt} of ${maxAttempts} failed with error: ${errorMessage}`);
           yield utils_1.sleep(utils_1.getExponentialRetryTimeInMilliseconds(attempt));
           attempt++;
         }
@@ -7933,7 +7933,7 @@ var require_upload_http_client = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var fs4 = __importStar(require("fs"));
-    var core3 = __importStar(require_core2());
+    var core4 = __importStar(require_core2());
     var tmp = __importStar(require_tmp_promise());
     var stream = __importStar(require("stream"));
     var utils_1 = require_utils3();
@@ -7987,7 +7987,7 @@ var require_upload_http_client = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           const FILE_CONCURRENCY = config_variables_1.getUploadFileConcurrency();
           const MAX_CHUNK_SIZE = config_variables_1.getUploadChunkSize();
-          core3.debug(`File Concurrency: ${FILE_CONCURRENCY}, and Chunk Size: ${MAX_CHUNK_SIZE}`);
+          core4.debug(`File Concurrency: ${FILE_CONCURRENCY}, and Chunk Size: ${MAX_CHUNK_SIZE}`);
           const parameters = [];
           let continueOnError = true;
           if (options) {
@@ -8024,15 +8024,15 @@ var require_upload_http_client = __commonJS({
               }
               const startTime = perf_hooks_1.performance.now();
               const uploadFileResult = yield this.uploadFileAsync(index, currentFileParameters);
-              if (core3.isDebug()) {
-                core3.debug(`File: ${++completedFiles}/${filesToUpload.length}. ${currentFileParameters.file} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish upload`);
+              if (core4.isDebug()) {
+                core4.debug(`File: ${++completedFiles}/${filesToUpload.length}. ${currentFileParameters.file} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish upload`);
               }
               uploadFileSize += uploadFileResult.successfulUploadSize;
               totalFileSize += uploadFileResult.totalSize;
               if (uploadFileResult.isSuccess === false) {
                 failedItemsToReport.push(currentFileParameters.file);
                 if (!continueOnError) {
-                  core3.error(`aborting artifact upload`);
+                  core4.error(`aborting artifact upload`);
                   abortPendingFileUploads = true;
                 }
               }
@@ -8041,7 +8041,7 @@ var require_upload_http_client = __commonJS({
           })));
           this.statusReporter.stop();
           this.uploadHttpManager.disposeAndReplaceAllClients();
-          core3.info(`Total size of all the files uploaded is ${uploadFileSize} bytes`);
+          core4.info(`Total size of all the files uploaded is ${uploadFileSize} bytes`);
           return {
             uploadSize: uploadFileSize,
             totalSize: totalFileSize,
@@ -8076,7 +8076,7 @@ var require_upload_http_client = __commonJS({
             if (!result) {
               isUploadSuccessful = false;
               failedChunkSizes += uploadFileSize;
-              core3.warning(`Aborting upload for ${parameters.file} due to failure`);
+              core4.warning(`Aborting upload for ${parameters.file} due to failure`);
             }
             return {
               isSuccess: isUploadSuccessful,
@@ -8113,7 +8113,7 @@ var require_upload_http_client = __commonJS({
               if (!result) {
                 isUploadSuccessful = false;
                 failedChunkSizes += chunkSize;
-                core3.warning(`Aborting upload for ${parameters.file} due to failure`);
+                core4.warning(`Aborting upload for ${parameters.file} due to failure`);
                 abortFileUpload = true;
               }
             }
@@ -8141,7 +8141,7 @@ var require_upload_http_client = __commonJS({
               if (response) {
                 utils_1.displayHttpDiagnostics(response);
               }
-              core3.info(`Retry limit has been reached for chunk at offset ${start2} to ${resourceUrl}`);
+              core4.info(`Retry limit has been reached for chunk at offset ${start2} to ${resourceUrl}`);
               return true;
             }
             return false;
@@ -8149,23 +8149,23 @@ var require_upload_http_client = __commonJS({
           const backOff = (retryAfterValue) => __awaiter(this, void 0, void 0, function* () {
             this.uploadHttpManager.disposeAndReplaceClient(httpClientIndex);
             if (retryAfterValue) {
-              core3.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the upload`);
+              core4.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the upload`);
               yield utils_1.sleep(retryAfterValue);
             } else {
               const backoffTime = utils_1.getExponentialRetryTimeInMilliseconds(retryCount);
-              core3.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the upload at offset ${start2}`);
+              core4.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the upload at offset ${start2}`);
               yield utils_1.sleep(backoffTime);
             }
-            core3.info(`Finished backoff for retry #${retryCount}, continuing with upload`);
+            core4.info(`Finished backoff for retry #${retryCount}, continuing with upload`);
             return;
           });
           while (retryCount <= retryLimit) {
             let response;
             try {
               response = yield uploadChunkRequest();
-            } catch (error) {
-              core3.info(`An error has been caught http-client index ${httpClientIndex}, retrying the upload`);
-              console.log(error);
+            } catch (error2) {
+              core4.info(`An error has been caught http-client index ${httpClientIndex}, retrying the upload`);
+              console.log(error2);
               if (incrementAndCheckRetryLimit()) {
                 return false;
               }
@@ -8176,13 +8176,13 @@ var require_upload_http_client = __commonJS({
             if (utils_1.isSuccessStatusCode(response.message.statusCode)) {
               return true;
             } else if (utils_1.isRetryableStatusCode(response.message.statusCode)) {
-              core3.info(`A ${response.message.statusCode} status code has been received, will attempt to retry the upload`);
+              core4.info(`A ${response.message.statusCode} status code has been received, will attempt to retry the upload`);
               if (incrementAndCheckRetryLimit(response)) {
                 return false;
               }
               utils_1.isThrottledStatusCode(response.message.statusCode) ? yield backOff(utils_1.tryGetRetryAfterValueTimeInMilliseconds(response.message.headers)) : yield backOff();
             } else {
-              core3.error(`Unexpected response. Unable to upload chunk to ${resourceUrl}`);
+              core4.error(`Unexpected response. Unable to upload chunk to ${resourceUrl}`);
               utils_1.displayHttpDiagnostics(response);
               return false;
             }
@@ -8196,7 +8196,7 @@ var require_upload_http_client = __commonJS({
           resourceUrl.searchParams.append("artifactName", artifactName);
           const parameters = { Size: size };
           const data = JSON.stringify(parameters, null, 2);
-          core3.debug(`URL is ${resourceUrl.toString()}`);
+          core4.debug(`URL is ${resourceUrl.toString()}`);
           const client = this.uploadHttpManager.getClient(0);
           const headers = utils_1.getUploadHeaders("application/json", false);
           const customErrorMessages = new Map([
@@ -8209,7 +8209,7 @@ var require_upload_http_client = __commonJS({
             return client.patch(resourceUrl.toString(), data, headers);
           }), customErrorMessages);
           yield response.readBody();
-          core3.debug(`Artifact ${artifactName} has been successfully uploaded, total size in bytes: ${size}`);
+          core4.debug(`Artifact ${artifactName} has been successfully uploaded, total size in bytes: ${size}`);
         });
       }
     };
@@ -8262,7 +8262,7 @@ var require_download_http_client = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var fs4 = __importStar(require("fs"));
-    var core3 = __importStar(require_core2());
+    var core4 = __importStar(require_core2());
     var zlib = __importStar(require("zlib"));
     var utils_1 = require_utils3();
     var url_1 = require("url");
@@ -8304,11 +8304,11 @@ var require_download_http_client = __commonJS({
       downloadSingleArtifact(downloadItems) {
         return __awaiter(this, void 0, void 0, function* () {
           const DOWNLOAD_CONCURRENCY = config_variables_1.getDownloadFileConcurrency();
-          core3.debug(`Download file concurrency is set to ${DOWNLOAD_CONCURRENCY}`);
+          core4.debug(`Download file concurrency is set to ${DOWNLOAD_CONCURRENCY}`);
           const parallelDownloads = [...new Array(DOWNLOAD_CONCURRENCY).keys()];
           let currentFile = 0;
           let downloadedFiles = 0;
-          core3.info(`Total number of files that will be downloaded: ${downloadItems.length}`);
+          core4.info(`Total number of files that will be downloaded: ${downloadItems.length}`);
           this.statusReporter.setTotalNumberOfFilesToProcess(downloadItems.length);
           this.statusReporter.start();
           yield Promise.all(parallelDownloads.map((index) => __awaiter(this, void 0, void 0, function* () {
@@ -8317,13 +8317,13 @@ var require_download_http_client = __commonJS({
               currentFile += 1;
               const startTime = perf_hooks_1.performance.now();
               yield this.downloadIndividualFile(index, currentFileToDownload.sourceLocation, currentFileToDownload.targetPath);
-              if (core3.isDebug()) {
-                core3.debug(`File: ${++downloadedFiles}/${downloadItems.length}. ${currentFileToDownload.targetPath} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish downloading`);
+              if (core4.isDebug()) {
+                core4.debug(`File: ${++downloadedFiles}/${downloadItems.length}. ${currentFileToDownload.targetPath} took ${(perf_hooks_1.performance.now() - startTime).toFixed(3)} milliseconds to finish downloading`);
               }
               this.statusReporter.incrementProcessedCount();
             }
-          }))).catch((error) => {
-            throw new Error(`Unable to download the artifact: ${error}`);
+          }))).catch((error2) => {
+            throw new Error(`Unable to download the artifact: ${error2}`);
           }).finally(() => {
             this.statusReporter.stop();
             this.downloadHttpManager.disposeAndReplaceAllClients();
@@ -8350,19 +8350,19 @@ var require_download_http_client = __commonJS({
             } else {
               this.downloadHttpManager.disposeAndReplaceClient(httpClientIndex);
               if (retryAfterValue) {
-                core3.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the download`);
+                core4.info(`Backoff due to too many requests, retry #${retryCount}. Waiting for ${retryAfterValue} milliseconds before continuing the download`);
                 yield utils_1.sleep(retryAfterValue);
               } else {
                 const backoffTime = utils_1.getExponentialRetryTimeInMilliseconds(retryCount);
-                core3.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the download`);
+                core4.info(`Exponential backoff for retry #${retryCount}. Waiting for ${backoffTime} milliseconds before continuing the download`);
                 yield utils_1.sleep(backoffTime);
               }
-              core3.info(`Finished backoff for retry #${retryCount}, continuing with download`);
+              core4.info(`Finished backoff for retry #${retryCount}, continuing with download`);
             }
           });
           const isAllBytesReceived = (expected, received) => {
             if (!expected || !received || process.env["ACTIONS_ARTIFACT_SKIP_DOWNLOAD_VALIDATION"]) {
-              core3.info("Skipping download validation.");
+              core4.info("Skipping download validation.");
               return true;
             }
             return parseInt(expected) === received;
@@ -8376,12 +8376,12 @@ var require_download_http_client = __commonJS({
             let response;
             try {
               response = yield makeDownloadRequest();
-              if (core3.isDebug()) {
+              if (core4.isDebug()) {
                 utils_1.displayHttpDiagnostics(response);
               }
-            } catch (error) {
-              core3.info("An error occurred while attempting to download a file");
-              console.log(error);
+            } catch (error2) {
+              core4.info("An error occurred while attempting to download a file");
+              console.log(error2);
               yield backOff();
               continue;
             }
@@ -8395,12 +8395,12 @@ var require_download_http_client = __commonJS({
                 } else {
                   forceRetry = true;
                 }
-              } catch (error) {
+              } catch (error2) {
                 forceRetry = true;
               }
             }
             if (forceRetry || utils_1.isRetryableStatusCode(response.message.statusCode)) {
-              core3.info(`A ${response.message.statusCode} response code has been received while attempting to download an artifact`);
+              core4.info(`A ${response.message.statusCode} response code has been received while attempting to download an artifact`);
               resetDestinationStream(downloadPath);
               utils_1.isThrottledStatusCode(response.message.statusCode) ? yield backOff(utils_1.tryGetRetryAfterValueTimeInMilliseconds(response.message.headers)) : yield backOff();
             } else {
@@ -8415,31 +8415,31 @@ var require_download_http_client = __commonJS({
           yield new Promise((resolve, reject) => {
             if (isGzip) {
               const gunzip = zlib.createGunzip();
-              response.message.on("error", (error) => {
-                core3.error(`An error occurred while attempting to read the response stream`);
+              response.message.on("error", (error2) => {
+                core4.error(`An error occurred while attempting to read the response stream`);
                 gunzip.close();
                 destinationStream.close();
-                reject(error);
-              }).pipe(gunzip).on("error", (error) => {
-                core3.error(`An error occurred while attempting to decompress the response stream`);
+                reject(error2);
+              }).pipe(gunzip).on("error", (error2) => {
+                core4.error(`An error occurred while attempting to decompress the response stream`);
                 destinationStream.close();
-                reject(error);
+                reject(error2);
               }).pipe(destinationStream).on("close", () => {
                 resolve();
-              }).on("error", (error) => {
-                core3.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
-                reject(error);
+              }).on("error", (error2) => {
+                core4.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
+                reject(error2);
               });
             } else {
-              response.message.on("error", (error) => {
-                core3.error(`An error occurred while attempting to read the response stream`);
+              response.message.on("error", (error2) => {
+                core4.error(`An error occurred while attempting to read the response stream`);
                 destinationStream.close();
-                reject(error);
+                reject(error2);
               }).pipe(destinationStream).on("close", () => {
                 resolve();
-              }).on("error", (error) => {
-                core3.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
-                reject(error);
+              }).on("error", (error2) => {
+                core4.error(`An error occurred while writing a downloaded file to ${destinationStream.path}`);
+                reject(error2);
               });
             }
           });
@@ -8545,7 +8545,7 @@ var require_artifact_client = __commonJS({
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var core3 = __importStar(require_core2());
+    var core4 = __importStar(require_core2());
     var upload_specification_1 = require_upload_specification();
     var upload_http_client_1 = require_upload_http_client();
     var utils_1 = require_utils3();
@@ -8569,17 +8569,17 @@ var require_artifact_client = __commonJS({
           };
           const uploadHttpClient = new upload_http_client_1.UploadHttpClient();
           if (uploadSpecification.length === 0) {
-            core3.warning(`No files found that can be uploaded`);
+            core4.warning(`No files found that can be uploaded`);
           } else {
             const response = yield uploadHttpClient.createArtifactInFileContainer(name, options);
             if (!response.fileContainerResourceUrl) {
-              core3.debug(response.toString());
+              core4.debug(response.toString());
               throw new Error("No URL provided by the Artifact Service to upload an artifact to");
             }
-            core3.debug(`Upload Resource URL: ${response.fileContainerResourceUrl}`);
+            core4.debug(`Upload Resource URL: ${response.fileContainerResourceUrl}`);
             const uploadResult = yield uploadHttpClient.uploadArtifactToFileContainer(response.fileContainerResourceUrl, uploadSpecification, options);
             yield uploadHttpClient.patchArtifactSize(uploadResult.totalSize, name);
-            core3.info(`Finished uploading artifact ${name}. Reported size is ${uploadResult.uploadSize} bytes. There were ${uploadResult.failedItems.length} items that failed to upload`);
+            core4.info(`Finished uploading artifact ${name}. Reported size is ${uploadResult.uploadSize} bytes. There were ${uploadResult.failedItems.length} items that failed to upload`);
             uploadResponse.artifactItems = uploadSpecification.map((item) => item.absoluteFilePath);
             uploadResponse.size = uploadResult.uploadSize;
             uploadResponse.failedItems = uploadResult.failedItems;
@@ -8608,10 +8608,10 @@ var require_artifact_client = __commonJS({
           path = path_1.resolve(path);
           const downloadSpecification = download_specification_1.getDownloadSpecification(name, items.value, path, (options === null || options === void 0 ? void 0 : options.createArtifactFolder) || false);
           if (downloadSpecification.filesToDownload.length === 0) {
-            core3.info(`No downloadable files were found for the artifact: ${artifactToDownload.name}`);
+            core4.info(`No downloadable files were found for the artifact: ${artifactToDownload.name}`);
           } else {
             yield utils_1.createDirectoriesForArtifact(downloadSpecification.directoryStructure);
-            core3.info("Directory structure has been setup for the artifact");
+            core4.info("Directory structure has been setup for the artifact");
             yield utils_1.createEmptyFilesForArtifact(downloadSpecification.emptyFilesToCreate);
             yield downloadHttpClient.downloadSingleArtifact(downloadSpecification.filesToDownload);
           }
@@ -8627,7 +8627,7 @@ var require_artifact_client = __commonJS({
           const response = [];
           const artifacts = yield downloadHttpClient.listArtifacts();
           if (artifacts.count === 0) {
-            core3.info("Unable to find any artifacts for the associated workflow");
+            core4.info("Unable to find any artifacts for the associated workflow");
             return response;
           }
           if (!path) {
@@ -8642,7 +8642,7 @@ var require_artifact_client = __commonJS({
             const items = yield downloadHttpClient.getContainerItems(currentArtifactToDownload.name, currentArtifactToDownload.fileContainerResourceUrl);
             const downloadSpecification = download_specification_1.getDownloadSpecification(currentArtifactToDownload.name, items.value, path, true);
             if (downloadSpecification.filesToDownload.length === 0) {
-              core3.info(`No downloadable files were found for any artifact ${currentArtifactToDownload.name}`);
+              core4.info(`No downloadable files were found for any artifact ${currentArtifactToDownload.name}`);
             } else {
               yield utils_1.createDirectoriesForArtifact(downloadSpecification.directoryStructure);
               yield utils_1.createEmptyFilesForArtifact(downloadSpecification.emptyFilesToCreate);
@@ -9161,7 +9161,7 @@ var require_react_development = __commonJS({
             printWarning("warn", format2, args);
           }
         }
-        function error(format2) {
+        function error2(format2) {
           {
             for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
               args[_key2 - 1] = arguments[_key2];
@@ -9193,7 +9193,7 @@ var require_react_development = __commonJS({
             if (didWarnStateUpdateForUnmountedComponent[warningKey]) {
               return;
             }
-            error("Can't call %s on a component that is not yet mounted. This is a no-op, but it might indicate a bug in your application. Instead, assign to `this.state` directly or define a `state = {};` class property with the desired state in the %s component.", callerName, componentName);
+            error2("Can't call %s on a component that is not yet mounted. This is a no-op, but it might indicate a bug in your application. Instead, assign to `this.state` directly or define a `state = {};` class property with the desired state in the %s component.", callerName, componentName);
             didWarnStateUpdateForUnmountedComponent[warningKey] = true;
           }
         }
@@ -9287,7 +9287,7 @@ var require_react_development = __commonJS({
           }
           {
             if (typeof type2.tag === "number") {
-              error("Received an unexpected object in getComponentName(). This is likely a bug in React. Please file an issue.");
+              error2("Received an unexpected object in getComponentName(). This is likely a bug in React. Please file an issue.");
             }
           }
           if (typeof type2 === "function") {
@@ -9376,7 +9376,7 @@ var require_react_development = __commonJS({
             {
               if (!specialPropKeyWarningShown) {
                 specialPropKeyWarningShown = true;
-                error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                error2("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
               }
             }
           };
@@ -9391,7 +9391,7 @@ var require_react_development = __commonJS({
             {
               if (!specialPropRefWarningShown) {
                 specialPropRefWarningShown = true;
-                error("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                error2("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
               }
             }
           };
@@ -9406,7 +9406,7 @@ var require_react_development = __commonJS({
             if (typeof config.ref === "string" && ReactCurrentOwner.current && config.__self && ReactCurrentOwner.current.stateNode !== config.__self) {
               var componentName = getComponentName(ReactCurrentOwner.current.type);
               if (!didWarnAboutStringRefs[componentName]) {
-                error('Component "%s" contains the string ref "%s". Support for string refs will be removed in a future major release. This case cannot be automatically converted to an arrow function. We ask you to manually fix this case by using useRef() or createRef() instead. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-string-ref', componentName, config.ref);
+                error2('Component "%s" contains the string ref "%s". Support for string refs will be removed in a future major release. This case cannot be automatically converted to an arrow function. We ask you to manually fix this case by using useRef() or createRef() instead. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-string-ref', componentName, config.ref);
                 didWarnAboutStringRefs[componentName] = true;
               }
             }
@@ -9712,7 +9712,7 @@ var require_react_development = __commonJS({
           } else {
             {
               if (calculateChangedBits !== null && typeof calculateChangedBits !== "function") {
-                error("createContext: Expected the optional second argument to be a function. Instead received: %s", calculateChangedBits);
+                error2("createContext: Expected the optional second argument to be a function. Instead received: %s", calculateChangedBits);
               }
             }
           }
@@ -9743,7 +9743,7 @@ var require_react_development = __commonJS({
                 get: function() {
                   if (!hasWarnedAboutUsingConsumerProvider) {
                     hasWarnedAboutUsingConsumerProvider = true;
-                    error("Rendering <Context.Consumer.Provider> is not supported and will be removed in a future major release. Did you mean to render <Context.Provider> instead?");
+                    error2("Rendering <Context.Consumer.Provider> is not supported and will be removed in a future major release. Did you mean to render <Context.Provider> instead?");
                   }
                   return context.Provider;
                 },
@@ -9779,7 +9779,7 @@ var require_react_development = __commonJS({
                 get: function() {
                   if (!hasWarnedAboutUsingNestedContextConsumers) {
                     hasWarnedAboutUsingNestedContextConsumers = true;
-                    error("Rendering <Context.Consumer.Consumer> is not supported and will be removed in a future major release. Did you mean to render <Context.Consumer> instead?");
+                    error2("Rendering <Context.Consumer.Consumer> is not supported and will be removed in a future major release. Did you mean to render <Context.Consumer> instead?");
                   }
                   return context.Consumer;
                 }
@@ -9820,18 +9820,18 @@ var require_react_development = __commonJS({
                 var defaultExport = moduleObject.default;
                 {
                   if (defaultExport === void 0) {
-                    error("lazy: Expected the result of a dynamic import() call. Instead received: %s\n\nYour code should look like: \n  const MyComponent = lazy(() => import('./MyComponent'))", moduleObject);
+                    error2("lazy: Expected the result of a dynamic import() call. Instead received: %s\n\nYour code should look like: \n  const MyComponent = lazy(() => import('./MyComponent'))", moduleObject);
                   }
                 }
                 var resolved = payload;
                 resolved._status = Resolved;
                 resolved._result = defaultExport;
               }
-            }, function(error2) {
+            }, function(error3) {
               if (payload._status === Pending) {
                 var rejected = payload;
                 rejected._status = Rejected;
-                rejected._result = error2;
+                rejected._result = error3;
               }
             });
           }
@@ -9861,7 +9861,7 @@ var require_react_development = __commonJS({
                   return defaultProps;
                 },
                 set: function(newDefaultProps) {
-                  error("React.lazy(...): It is not supported to assign `defaultProps` to a lazy component import. Either specify them where the component is defined, or create a wrapping component around it.");
+                  error2("React.lazy(...): It is not supported to assign `defaultProps` to a lazy component import. Either specify them where the component is defined, or create a wrapping component around it.");
                   defaultProps = newDefaultProps;
                   Object.defineProperty(lazyType, "defaultProps", {
                     enumerable: true
@@ -9874,7 +9874,7 @@ var require_react_development = __commonJS({
                   return propTypes;
                 },
                 set: function(newPropTypes) {
-                  error("React.lazy(...): It is not supported to assign `propTypes` to a lazy component import. Either specify them where the component is defined, or create a wrapping component around it.");
+                  error2("React.lazy(...): It is not supported to assign `propTypes` to a lazy component import. Either specify them where the component is defined, or create a wrapping component around it.");
                   propTypes = newPropTypes;
                   Object.defineProperty(lazyType, "propTypes", {
                     enumerable: true
@@ -9888,17 +9888,17 @@ var require_react_development = __commonJS({
         function forwardRef(render) {
           {
             if (render != null && render.$$typeof === REACT_MEMO_TYPE) {
-              error("forwardRef requires a render function but received a `memo` component. Instead of forwardRef(memo(...)), use memo(forwardRef(...)).");
+              error2("forwardRef requires a render function but received a `memo` component. Instead of forwardRef(memo(...)), use memo(forwardRef(...)).");
             } else if (typeof render !== "function") {
-              error("forwardRef requires a render function but was given %s.", render === null ? "null" : typeof render);
+              error2("forwardRef requires a render function but was given %s.", render === null ? "null" : typeof render);
             } else {
               if (render.length !== 0 && render.length !== 2) {
-                error("forwardRef render functions accept exactly two parameters: props and ref. %s", render.length === 1 ? "Did you forget to use the ref parameter?" : "Any additional parameter will be undefined.");
+                error2("forwardRef render functions accept exactly two parameters: props and ref. %s", render.length === 1 ? "Did you forget to use the ref parameter?" : "Any additional parameter will be undefined.");
               }
             }
             if (render != null) {
               if (render.defaultProps != null || render.propTypes != null) {
-                error("forwardRef render functions do not support propTypes or defaultProps. Did you accidentally pass a React component?");
+                error2("forwardRef render functions do not support propTypes or defaultProps. Did you accidentally pass a React component?");
               }
             }
           }
@@ -9942,7 +9942,7 @@ var require_react_development = __commonJS({
         function memo(type2, compare) {
           {
             if (!isValidElementType(type2)) {
-              error("memo: The first argument must be a component. Instead received: %s", type2 === null ? "null" : typeof type2);
+              error2("memo: The first argument must be a component. Instead received: %s", type2 === null ? "null" : typeof type2);
             }
           }
           var elementType = {
@@ -9981,14 +9981,14 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           {
             if (unstable_observedBits !== void 0) {
-              error("useContext() second argument is reserved for future use in React. Passing it is not supported. You passed: %s.%s", unstable_observedBits, typeof unstable_observedBits === "number" && Array.isArray(arguments[2]) ? "\n\nDid you call array.map(useContext)? Calling Hooks inside a loop is not supported. Learn more at https://reactjs.org/link/rules-of-hooks" : "");
+              error2("useContext() second argument is reserved for future use in React. Passing it is not supported. You passed: %s.%s", unstable_observedBits, typeof unstable_observedBits === "number" && Array.isArray(arguments[2]) ? "\n\nDid you call array.map(useContext)? Calling Hooks inside a loop is not supported. Learn more at https://reactjs.org/link/rules-of-hooks" : "");
             }
             if (Context._context !== void 0) {
               var realContext = Context._context;
               if (realContext.Consumer === Context) {
-                error("Calling useContext(Context.Consumer) is not supported, may cause bugs, and will be removed in a future major release. Did you mean to call useContext(Context) instead?");
+                error2("Calling useContext(Context.Consumer) is not supported, may cause bugs, and will be removed in a future major release. Did you mean to call useContext(Context) instead?");
               } else if (realContext.Provider === Context) {
-                error("Calling useContext(Context.Provider) is not supported. Did you mean to call useContext(Context) instead?");
+                error2("Calling useContext(Context.Provider) is not supported. Did you mean to call useContext(Context) instead?");
               }
             }
           }
@@ -10106,7 +10106,7 @@ var require_react_development = __commonJS({
               });
             }
             if (disabledDepth < 0) {
-              error("disabledDepth fell below zero. This is a bug in React. Please file an issue.");
+              error2("disabledDepth fell below zero. This is a bug in React. Please file an issue.");
             }
           }
         }
@@ -10310,13 +10310,13 @@ var require_react_development = __commonJS({
                 }
                 if (error$1 && !(error$1 instanceof Error)) {
                   setCurrentlyValidatingElement(element);
-                  error("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location, typeSpecName, typeof error$1);
+                  error2("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location, typeSpecName, typeof error$1);
                   setCurrentlyValidatingElement(null);
                 }
                 if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
                   loggedTypeFailures[error$1.message] = true;
                   setCurrentlyValidatingElement(element);
-                  error("Failed %s type: %s", location, error$1.message);
+                  error2("Failed %s type: %s", location, error$1.message);
                   setCurrentlyValidatingElement(null);
                 }
               }
@@ -10388,7 +10388,7 @@ var require_react_development = __commonJS({
           }
           {
             setCurrentlyValidatingElement$1(element);
-            error('Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.', currentComponentErrorInfo, childOwner);
+            error2('Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.', currentComponentErrorInfo, childOwner);
             setCurrentlyValidatingElement$1(null);
           }
         }
@@ -10442,10 +10442,10 @@ var require_react_development = __commonJS({
             } else if (type2.PropTypes !== void 0 && !propTypesMisspellWarningShown) {
               propTypesMisspellWarningShown = true;
               var _name = getComponentName(type2);
-              error("Component %s declared `PropTypes` instead of `propTypes`. Did you misspell the property assignment?", _name || "Unknown");
+              error2("Component %s declared `PropTypes` instead of `propTypes`. Did you misspell the property assignment?", _name || "Unknown");
             }
             if (typeof type2.getDefaultProps === "function" && !type2.getDefaultProps.isReactClassApproved) {
-              error("getDefaultProps is only used on classic React.createClass definitions. Use a static property named `defaultProps` instead.");
+              error2("getDefaultProps is only used on classic React.createClass definitions. Use a static property named `defaultProps` instead.");
             }
           }
         }
@@ -10456,14 +10456,14 @@ var require_react_development = __commonJS({
               var key = keys[i];
               if (key !== "children" && key !== "key") {
                 setCurrentlyValidatingElement$1(fragment);
-                error("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", key);
+                error2("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", key);
                 setCurrentlyValidatingElement$1(null);
                 break;
               }
             }
             if (fragment.ref !== null) {
               setCurrentlyValidatingElement$1(fragment);
-              error("Invalid attribute `ref` supplied to `React.Fragment`.");
+              error2("Invalid attribute `ref` supplied to `React.Fragment`.");
               setCurrentlyValidatingElement$1(null);
             }
           }
@@ -10493,7 +10493,7 @@ var require_react_development = __commonJS({
               typeString = typeof type2;
             }
             {
-              error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info3);
+              error2("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info3);
             }
           }
           var element = createElement.apply(this, arguments);
@@ -11603,7 +11603,7 @@ var require_react_dom_server_node_development = __commonJS({
             printWarning("warn", format2, args);
           }
         }
-        function error(format2) {
+        function error2(format2) {
           {
             for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
               args[_key2 - 1] = arguments[_key2];
@@ -11682,7 +11682,7 @@ var require_react_dom_server_node_development = __commonJS({
           }
           {
             if (typeof type2.tag === "number") {
-              error("Received an unexpected object in getComponentName(). This is likely a bug in React. Please file an issue.");
+              error2("Received an unexpected object in getComponentName(). This is likely a bug in React. Please file an issue.");
             }
           }
           if (typeof type2 === "function") {
@@ -11808,7 +11808,7 @@ var require_react_dom_server_node_development = __commonJS({
               });
             }
             if (disabledDepth < 0) {
-              error("disabledDepth fell below zero. This is a bug in React. Please file an issue.");
+              error2("disabledDepth fell below zero. This is a bug in React. Please file an issue.");
             }
           }
         }
@@ -12012,13 +12012,13 @@ var require_react_dom_server_node_development = __commonJS({
                 }
                 if (error$1 && !(error$1 instanceof Error)) {
                   setCurrentlyValidatingElement(element);
-                  error("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location, typeSpecName, typeof error$1);
+                  error2("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location, typeSpecName, typeof error$1);
                   setCurrentlyValidatingElement(null);
                 }
                 if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
                   loggedTypeFailures[error$1.message] = true;
                   setCurrentlyValidatingElement(element);
-                  error("Failed %s type: %s", location, error$1.message);
+                  error2("Failed %s type: %s", location, error$1.message);
                   setCurrentlyValidatingElement(null);
                 }
               }
@@ -12075,7 +12075,7 @@ var require_react_dom_server_node_development = __commonJS({
                   } else {
                     addendum = " However, it is set to an object with keys {" + Object.keys(contextType).join(", ") + "}.";
                   }
-                  error("%s defines an invalid contextType. contextType should point to the Context object returned by React.createContext().%s", getComponentName(type2) || "Component", addendum);
+                  error2("%s defines an invalid contextType. contextType should point to the Context object returned by React.createContext().%s", getComponentName(type2) || "Component", addendum);
                 }
               }
             }
@@ -12167,7 +12167,7 @@ var require_react_dom_server_node_development = __commonJS({
           }
           illegalAttributeNameCache[attributeName] = true;
           {
-            error("Invalid attribute name: `%s`", attributeName);
+            error2("Invalid attribute name: `%s`", attributeName);
           }
           return false;
         }
@@ -12434,7 +12434,7 @@ var require_react_dom_server_node_development = __commonJS({
           {
             if (!didWarn && isJavaScriptProtocol.test(url)) {
               didWarn = true;
-              error("A future version of React will block javascript: URLs as a security precaution. Use event handlers instead if you can. If you need to generate unsafe HTML try using dangerouslySetInnerHTML instead. React was passed %s.", JSON.stringify(url));
+              error2("A future version of React will block javascript: URLs as a security precaution. Use event handlers instead if you can. If you need to generate unsafe HTML try using dangerouslySetInnerHTML instead. React was passed %s.", JSON.stringify(url));
             }
           }
         }
@@ -12542,7 +12542,7 @@ var require_react_dom_server_node_development = __commonJS({
           }
           {
             if (isInHookUserCodeInDev) {
-              error("Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. You can only call Hooks at the top level of your React function. For more information, see https://reactjs.org/link/rules-of-hooks");
+              error2("Do not call Hooks inside useEffect(...), useMemo(...), or other built-in Hooks. You can only call Hooks at the top level of your React function. For more information, see https://reactjs.org/link/rules-of-hooks");
             }
           }
           return currentlyRenderingComponent;
@@ -12550,13 +12550,13 @@ var require_react_dom_server_node_development = __commonJS({
         function areHookInputsEqual(nextDeps, prevDeps) {
           if (prevDeps === null) {
             {
-              error("%s received a final argument during this render, but not during the previous render. Even though the final argument is optional, its type cannot change between renders.", currentHookNameInDev);
+              error2("%s received a final argument during this render, but not during the previous render. Even though the final argument is optional, its type cannot change between renders.", currentHookNameInDev);
             }
             return false;
           }
           {
             if (nextDeps.length !== prevDeps.length) {
-              error("The final argument passed to %s changed size between renders. The order and size of this array must remain constant.\n\nPrevious: %s\nIncoming: %s", currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prevDeps.join(", ") + "]");
+              error2("The final argument passed to %s changed size between renders. The order and size of this array must remain constant.\n\nPrevious: %s\nIncoming: %s", currentHookNameInDev, "[" + nextDeps.join(", ") + "]", "[" + prevDeps.join(", ") + "]");
             }
           }
           for (var i2 = 0; i2 < prevDeps.length && i2 < nextDeps.length; i2++) {
@@ -12633,7 +12633,7 @@ var require_react_dom_server_node_development = __commonJS({
           validateContextBounds(context, threadID);
           {
             if (isInHookUserCodeInDev) {
-              error("Context can only be read while React is rendering. In classes, you can read it in the render method or getDerivedStateFromProps. In function components, you can read it directly in the function body, but not inside Hooks like useReducer() or useMemo().");
+              error2("Context can only be read while React is rendering. In classes, you can read it in the render method or getDerivedStateFromProps. In function components, you can read it directly in the function body, but not inside Hooks like useReducer() or useMemo().");
             }
           }
           return context[threadID];
@@ -12756,7 +12756,7 @@ var require_react_dom_server_node_development = __commonJS({
         function useLayoutEffect(create3, inputs) {
           {
             currentHookNameInDev = "useLayoutEffect";
-            error("useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.");
+            error2("useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.");
           }
         }
         function dispatchAction(componentIdentity, queue, action) {
@@ -12871,10 +12871,10 @@ var require_react_dom_server_node_development = __commonJS({
         function checkControlledValueProps(tagName, props2) {
           {
             if (!(hasReadOnlyValue[props2.type] || props2.onChange || props2.onInput || props2.readOnly || props2.disabled || props2.value == null)) {
-              error("You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.");
+              error2("You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.");
             }
             if (!(props2.onChange || props2.readOnly || props2.disabled || props2.checked == null)) {
-              error("You provided a `checked` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultChecked`. Otherwise, set either `onChange` or `readOnly`.");
+              error2("You provided a `checked` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultChecked`. Otherwise, set either `onChange` or `readOnly`.");
             }
           }
         }
@@ -12924,7 +12924,7 @@ var require_react_dom_server_node_development = __commonJS({
           }
           {
             if (!props2.suppressContentEditableWarning && props2.contentEditable && props2.children != null) {
-              error("A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.");
+              error2("A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.");
             }
           }
           if (!(props2.style == null || typeof props2.style === "object")) {
@@ -13040,35 +13040,35 @@ var require_react_dom_server_node_development = __commonJS({
               return;
             }
             warnedStyleNames[name] = true;
-            error("Unsupported style property %s. Did you mean %s?", name, camelize(name.replace(msPattern$1, "ms-")));
+            error2("Unsupported style property %s. Did you mean %s?", name, camelize(name.replace(msPattern$1, "ms-")));
           };
           var warnBadVendoredStyleName = function(name) {
             if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
               return;
             }
             warnedStyleNames[name] = true;
-            error("Unsupported vendor-prefixed style property %s. Did you mean %s?", name, name.charAt(0).toUpperCase() + name.slice(1));
+            error2("Unsupported vendor-prefixed style property %s. Did you mean %s?", name, name.charAt(0).toUpperCase() + name.slice(1));
           };
           var warnStyleValueWithSemicolon = function(name, value) {
             if (warnedStyleValues.hasOwnProperty(value) && warnedStyleValues[value]) {
               return;
             }
             warnedStyleValues[value] = true;
-            error(`Style property values shouldn't contain a semicolon. Try "%s: %s" instead.`, name, value.replace(badStyleValueWithSemicolonPattern, ""));
+            error2(`Style property values shouldn't contain a semicolon. Try "%s: %s" instead.`, name, value.replace(badStyleValueWithSemicolonPattern, ""));
           };
           var warnStyleValueIsNaN = function(name, value) {
             if (warnedForNaNValue) {
               return;
             }
             warnedForNaNValue = true;
-            error("`NaN` is an invalid value for the `%s` css style property.", name);
+            error2("`NaN` is an invalid value for the `%s` css style property.", name);
           };
           var warnStyleValueIsInfinity = function(name, value) {
             if (warnedForInfinityValue) {
               return;
             }
             warnedForInfinityValue = true;
-            error("`Infinity` is an invalid value for the `%s` css style property.", name);
+            error2("`Infinity` is an invalid value for the `%s` css style property.", name);
           };
           warnValidStyle = function(name, value) {
             if (name.indexOf("-") > -1) {
@@ -13151,12 +13151,12 @@ var require_react_dom_server_node_development = __commonJS({
               var ariaName = "aria-" + name.slice(4).toLowerCase();
               var correctName = ariaProperties.hasOwnProperty(ariaName) ? ariaName : null;
               if (correctName == null) {
-                error("Invalid ARIA attribute `%s`. ARIA attributes follow the pattern aria-* and must be lowercase.", name);
+                error2("Invalid ARIA attribute `%s`. ARIA attributes follow the pattern aria-* and must be lowercase.", name);
                 warnedProperties[name] = true;
                 return true;
               }
               if (name !== correctName) {
-                error("Invalid ARIA attribute `%s`. Did you mean `%s`?", name, correctName);
+                error2("Invalid ARIA attribute `%s`. Did you mean `%s`?", name, correctName);
                 warnedProperties[name] = true;
                 return true;
               }
@@ -13169,7 +13169,7 @@ var require_react_dom_server_node_development = __commonJS({
                 return false;
               }
               if (name !== standardName) {
-                error("Unknown ARIA attribute `%s`. Did you mean `%s`?", name, standardName);
+                error2("Unknown ARIA attribute `%s`. Did you mean `%s`?", name, standardName);
                 warnedProperties[name] = true;
                 return true;
               }
@@ -13190,9 +13190,9 @@ var require_react_dom_server_node_development = __commonJS({
               return "`" + prop + "`";
             }).join(", ");
             if (invalidProps.length === 1) {
-              error("Invalid aria prop %s on <%s> tag. For details, see https://reactjs.org/link/invalid-aria-props", unknownPropString, type2);
+              error2("Invalid aria prop %s on <%s> tag. For details, see https://reactjs.org/link/invalid-aria-props", unknownPropString, type2);
             } else if (invalidProps.length > 1) {
-              error("Invalid aria props %s on <%s> tag. For details, see https://reactjs.org/link/invalid-aria-props", unknownPropString, type2);
+              error2("Invalid aria props %s on <%s> tag. For details, see https://reactjs.org/link/invalid-aria-props", unknownPropString, type2);
             }
           }
         }
@@ -13211,9 +13211,9 @@ var require_react_dom_server_node_development = __commonJS({
             if (props2 != null && props2.value === null && !didWarnValueNull) {
               didWarnValueNull = true;
               if (type2 === "select" && props2.multiple) {
-                error("`value` prop on `%s` should not be null. Consider using an empty array when `multiple` is set to `true` to clear the component or `undefined` for uncontrolled components.", type2);
+                error2("`value` prop on `%s` should not be null. Consider using an empty array when `multiple` is set to `true` to clear the component or `undefined` for uncontrolled components.", type2);
               } else {
-                error("`value` prop on `%s` should not be null. Consider using an empty string to clear the component or `undefined` for uncontrolled components.", type2);
+                error2("`value` prop on `%s` should not be null. Consider using an empty string to clear the component or `undefined` for uncontrolled components.", type2);
               }
             }
           }
@@ -13718,7 +13718,7 @@ var require_react_dom_server_node_development = __commonJS({
             }
             var lowerCasedName = name.toLowerCase();
             if (lowerCasedName === "onfocusin" || lowerCasedName === "onfocusout") {
-              error("React uses onFocus and onBlur instead of onFocusIn and onFocusOut. All React events are normalized to bubble, so onFocusIn and onFocusOut are not needed/supported by React.");
+              error2("React uses onFocus and onBlur instead of onFocusIn and onFocusOut. All React events are normalized to bubble, so onFocusIn and onFocusOut are not needed/supported by React.");
               warnedProperties$1[name] = true;
               return true;
             }
@@ -13729,18 +13729,18 @@ var require_react_dom_server_node_development = __commonJS({
               }
               var registrationName = possibleRegistrationNames.hasOwnProperty(lowerCasedName) ? possibleRegistrationNames[lowerCasedName] : null;
               if (registrationName != null) {
-                error("Invalid event handler property `%s`. Did you mean `%s`?", name, registrationName);
+                error2("Invalid event handler property `%s`. Did you mean `%s`?", name, registrationName);
                 warnedProperties$1[name] = true;
                 return true;
               }
               if (EVENT_NAME_REGEX.test(name)) {
-                error("Unknown event handler property `%s`. It will be ignored.", name);
+                error2("Unknown event handler property `%s`. It will be ignored.", name);
                 warnedProperties$1[name] = true;
                 return true;
               }
             } else if (EVENT_NAME_REGEX.test(name)) {
               if (INVALID_EVENT_NAME_REGEX.test(name)) {
-                error("Invalid event handler property `%s`. React events use the camelCase naming convention, for example `onClick`.", name);
+                error2("Invalid event handler property `%s`. React events use the camelCase naming convention, for example `onClick`.", name);
               }
               warnedProperties$1[name] = true;
               return true;
@@ -13749,22 +13749,22 @@ var require_react_dom_server_node_development = __commonJS({
               return true;
             }
             if (lowerCasedName === "innerhtml") {
-              error("Directly setting property `innerHTML` is not permitted. For more information, lookup documentation on `dangerouslySetInnerHTML`.");
+              error2("Directly setting property `innerHTML` is not permitted. For more information, lookup documentation on `dangerouslySetInnerHTML`.");
               warnedProperties$1[name] = true;
               return true;
             }
             if (lowerCasedName === "aria") {
-              error("The `aria` attribute is reserved for future use in React. Pass individual `aria-` attributes instead.");
+              error2("The `aria` attribute is reserved for future use in React. Pass individual `aria-` attributes instead.");
               warnedProperties$1[name] = true;
               return true;
             }
             if (lowerCasedName === "is" && value !== null && value !== void 0 && typeof value !== "string") {
-              error("Received a `%s` for a string attribute `is`. If this is expected, cast the value to a string.", typeof value);
+              error2("Received a `%s` for a string attribute `is`. If this is expected, cast the value to a string.", typeof value);
               warnedProperties$1[name] = true;
               return true;
             }
             if (typeof value === "number" && isNaN(value)) {
-              error("Received NaN for the `%s` attribute. If this is expected, cast the value to a string.", name);
+              error2("Received NaN for the `%s` attribute. If this is expected, cast the value to a string.", name);
               warnedProperties$1[name] = true;
               return true;
             }
@@ -13773,20 +13773,20 @@ var require_react_dom_server_node_development = __commonJS({
             if (possibleStandardNames.hasOwnProperty(lowerCasedName)) {
               var standardName = possibleStandardNames[lowerCasedName];
               if (standardName !== name) {
-                error("Invalid DOM property `%s`. Did you mean `%s`?", name, standardName);
+                error2("Invalid DOM property `%s`. Did you mean `%s`?", name, standardName);
                 warnedProperties$1[name] = true;
                 return true;
               }
             } else if (!isReserved && name !== lowerCasedName) {
-              error("React does not recognize the `%s` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `%s` instead. If you accidentally passed it from a parent component, remove it from the DOM element.", name, lowerCasedName);
+              error2("React does not recognize the `%s` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `%s` instead. If you accidentally passed it from a parent component, remove it from the DOM element.", name, lowerCasedName);
               warnedProperties$1[name] = true;
               return true;
             }
             if (typeof value === "boolean" && shouldRemoveAttributeWithWarning(name, value, propertyInfo, false)) {
               if (value) {
-                error('Received `%s` for a non-boolean attribute `%s`.\n\nIf you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}.', value, name, name, value, name);
+                error2('Received `%s` for a non-boolean attribute `%s`.\n\nIf you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}.', value, name, name, value, name);
               } else {
-                error('Received `%s` for a non-boolean attribute `%s`.\n\nIf you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}.\n\nIf you used to conditionally omit it with %s={condition && value}, pass %s={condition ? value : undefined} instead.', value, name, name, value, name, name, name);
+                error2('Received `%s` for a non-boolean attribute `%s`.\n\nIf you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}.\n\nIf you used to conditionally omit it with %s={condition && value}, pass %s={condition ? value : undefined} instead.', value, name, name, value, name, name, name);
               }
               warnedProperties$1[name] = true;
               return true;
@@ -13799,7 +13799,7 @@ var require_react_dom_server_node_development = __commonJS({
               return false;
             }
             if ((value === "false" || value === "true") && propertyInfo !== null && propertyInfo.type === BOOLEAN) {
-              error("Received the string `%s` for the boolean attribute `%s`. %s Did you mean %s={%s}?", value, name, value === "false" ? "The browser will interpret it as a truthy value." : 'Although this works, it will not work as expected if you pass the string "false".', name, value);
+              error2("Received the string `%s` for the boolean attribute `%s`. %s Did you mean %s={%s}?", value, name, value === "false" ? "The browser will interpret it as a truthy value." : 'Although this works, it will not work as expected if you pass the string "false".', name, value);
               warnedProperties$1[name] = true;
               return true;
             }
@@ -13819,9 +13819,9 @@ var require_react_dom_server_node_development = __commonJS({
               return "`" + prop + "`";
             }).join(", ");
             if (unknownProps.length === 1) {
-              error("Invalid value for prop %s on <%s> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://reactjs.org/link/attribute-behavior ", unknownPropString, type2);
+              error2("Invalid value for prop %s on <%s> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://reactjs.org/link/attribute-behavior ", unknownPropString, type2);
             } else if (unknownProps.length > 1) {
-              error("Invalid values for props %s on <%s> tag. Either remove them from the element, or pass a string or number value to keep them in the DOM. For details, see https://reactjs.org/link/attribute-behavior ", unknownPropString, type2);
+              error2("Invalid values for props %s on <%s> tag. Either remove them from the element, or pass a string or number value to keep them in the DOM. For details, see https://reactjs.org/link/attribute-behavior ", unknownPropString, type2);
             }
           }
         };
@@ -13964,7 +13964,7 @@ var require_react_dom_server_node_development = __commonJS({
             if (didWarnAboutNoopUpdateForComponent[warningKey]) {
               return;
             }
-            error("%s(...): Can only update a mounting component. This usually means you called %s() outside componentWillMount() on the server. This is a no-op.\n\nPlease check the code for the %s component.", callerName, callerName, componentName);
+            error2("%s(...): Can only update a mounting component. This usually means you called %s() outside componentWillMount() on the server. This is a no-op.\n\nPlease check the code for the %s component.", callerName, callerName, componentName);
             didWarnAboutNoopUpdateForComponent[warningKey] = true;
           }
         }
@@ -14013,7 +14013,7 @@ var require_react_dom_server_node_development = __commonJS({
             {
               if (!didWarnInvalidOptionChildren && typeof child !== "string" && typeof child !== "number") {
                 didWarnInvalidOptionChildren = true;
-                error("Only strings and numbers are supported as <option> children.");
+                error2("Only strings and numbers are supported as <option> children.");
               }
             }
           });
@@ -14117,7 +14117,7 @@ var require_react_dom_server_node_development = __commonJS({
                   if (inst.state === null || inst.state === void 0) {
                     var componentName = getComponentName(Component2) || "Unknown";
                     if (!didWarnAboutUninitializedState[componentName]) {
-                      error("`%s` uses `getDerivedStateFromProps` but its initial state is %s. This is not recommended. Instead, define the initial state by assigning an object to `this.state` in the constructor of `%s`. This ensures that `getDerivedStateFromProps` arguments have a consistent shape.", componentName, inst.state === null ? "null" : "undefined", componentName);
+                      error2("`%s` uses `getDerivedStateFromProps` but its initial state is %s. This is not recommended. Instead, define the initial state by assigning an object to `this.state` in the constructor of `%s`. This ensures that `getDerivedStateFromProps` arguments have a consistent shape.", componentName, inst.state === null ? "null" : "undefined", componentName);
                       didWarnAboutUninitializedState[componentName] = true;
                     }
                   }
@@ -14127,7 +14127,7 @@ var require_react_dom_server_node_development = __commonJS({
                   if (partialState === void 0) {
                     var _componentName = getComponentName(Component2) || "Unknown";
                     if (!didWarnAboutUndefinedDerivedState[_componentName]) {
-                      error("%s.getDerivedStateFromProps(): A valid state object (or null) must be returned. You have returned undefined.", _componentName);
+                      error2("%s.getDerivedStateFromProps(): A valid state object (or null) must be returned. You have returned undefined.", _componentName);
                       didWarnAboutUndefinedDerivedState[_componentName] = true;
                     }
                   }
@@ -14141,7 +14141,7 @@ var require_react_dom_server_node_development = __commonJS({
                 if (Component2.prototype && typeof Component2.prototype.render === "function") {
                   var _componentName2 = getComponentName(Component2) || "Unknown";
                   if (!didWarnAboutBadClass[_componentName2]) {
-                    error("The <%s /> component appears to have a render method, but doesn't extend React.Component. This is likely to cause errors. Change %s to extend React.Component instead.", _componentName2, _componentName2);
+                    error2("The <%s /> component appears to have a render method, but doesn't extend React.Component. This is likely to cause errors. Change %s to extend React.Component instead.", _componentName2, _componentName2);
                     didWarnAboutBadClass[_componentName2] = true;
                   }
                 }
@@ -14154,7 +14154,7 @@ var require_react_dom_server_node_development = __commonJS({
                 if (inst != null && inst.render != null) {
                   var _componentName3 = getComponentName(Component2) || "Unknown";
                   if (!didWarnAboutModulePatternComponent[_componentName3]) {
-                    error("The <%s /> component appears to be a function component that returns a class instance. Change %s to a class that extends React.Component instead. If you can't use a class try assigning the prototype on the function as a workaround. `%s.prototype = React.Component.prototype`. Don't use an arrow function since it cannot be called with `new` by React.", _componentName3, _componentName3, _componentName3);
+                    error2("The <%s /> component appears to be a function component that returns a class instance. Change %s to a class that extends React.Component instead. If you can't use a class try assigning the prototype on the function as a workaround. `%s.prototype = React.Component.prototype`. Don't use an arrow function since it cannot be called with `new` by React.", _componentName3, _componentName3, _componentName3);
                     didWarnAboutModulePatternComponent[_componentName3] = true;
                   }
                 }
@@ -14240,7 +14240,7 @@ var require_react_dom_server_node_development = __commonJS({
                   }
                 } else {
                   {
-                    error("%s.getChildContext(): childContextTypes must be defined in order to use getChildContext().", getComponentName(Component2) || "Unknown");
+                    error2("%s.getChildContext(): childContextTypes must be defined in order to use getChildContext().", getComponentName(Component2) || "Unknown");
                   }
                 }
               }
@@ -14309,7 +14309,7 @@ var require_react_dom_server_node_development = __commonJS({
             var index = this.contextIndex;
             {
               if (index < 0 || provider !== this.contextProviderStack[index]) {
-                error("Unexpected pop.");
+                error2("Unexpected pop.");
               }
             }
             var context = this.contextStack[index];
@@ -14586,7 +14586,7 @@ var require_react_dom_server_node_development = __commonJS({
                         if (reactContext !== reactContext.Consumer) {
                           if (!hasWarnedAboutUsingContextAsConsumer) {
                             hasWarnedAboutUsingContextAsConsumer = true;
-                            error("Rendering <Context> directly is not supported and will be removed in a future major release. Did you mean to render <Context.Consumer> instead?");
+                            error2("Rendering <Context> directly is not supported and will be removed in a future major release. Did you mean to render <Context.Consumer> instead?");
                           }
                         }
                       } else {
@@ -14671,7 +14671,7 @@ var require_react_dom_server_node_development = __commonJS({
             {
               if (namespace === Namespaces.html) {
                 if (tag !== element.type) {
-                  error("<%s /> is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.", element.type);
+                  error2("<%s /> is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.", element.type);
                 }
               }
             }
@@ -14681,11 +14681,11 @@ var require_react_dom_server_node_development = __commonJS({
               {
                 checkControlledValueProps("input", props2);
                 if (props2.checked !== void 0 && props2.defaultChecked !== void 0 && !didWarnDefaultChecked) {
-                  error("%s contains an input of type %s with both checked and defaultChecked props. Input elements must be either controlled or uncontrolled (specify either the checked prop, or the defaultChecked prop, but not both). Decide between using a controlled or uncontrolled input element and remove one of these props. More info: https://reactjs.org/link/controlled-components", "A component", props2.type);
+                  error2("%s contains an input of type %s with both checked and defaultChecked props. Input elements must be either controlled or uncontrolled (specify either the checked prop, or the defaultChecked prop, but not both). Decide between using a controlled or uncontrolled input element and remove one of these props. More info: https://reactjs.org/link/controlled-components", "A component", props2.type);
                   didWarnDefaultChecked = true;
                 }
                 if (props2.value !== void 0 && props2.defaultValue !== void 0 && !didWarnDefaultInputValue) {
-                  error("%s contains an input of type %s with both value and defaultValue props. Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both). Decide between using a controlled or uncontrolled input element and remove one of these props. More info: https://reactjs.org/link/controlled-components", "A component", props2.type);
+                  error2("%s contains an input of type %s with both value and defaultValue props. Input elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both). Decide between using a controlled or uncontrolled input element and remove one of these props. More info: https://reactjs.org/link/controlled-components", "A component", props2.type);
                   didWarnDefaultInputValue = true;
                 }
               }
@@ -14701,7 +14701,7 @@ var require_react_dom_server_node_development = __commonJS({
               {
                 checkControlledValueProps("textarea", props2);
                 if (props2.value !== void 0 && props2.defaultValue !== void 0 && !didWarnDefaultTextareaValue) {
-                  error("Textarea elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both). Decide between using a controlled or uncontrolled textarea and remove one of these props. More info: https://reactjs.org/link/controlled-components");
+                  error2("Textarea elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both). Decide between using a controlled or uncontrolled textarea and remove one of these props. More info: https://reactjs.org/link/controlled-components");
                   didWarnDefaultTextareaValue = true;
                 }
               }
@@ -14711,7 +14711,7 @@ var require_react_dom_server_node_development = __commonJS({
                 var textareaChildren = props2.children;
                 if (textareaChildren != null) {
                   {
-                    error("Use the `defaultValue` or `value` props instead of setting children on <textarea>.");
+                    error2("Use the `defaultValue` or `value` props instead of setting children on <textarea>.");
                   }
                   if (!(defaultValue == null)) {
                     {
@@ -14747,13 +14747,13 @@ var require_react_dom_server_node_development = __commonJS({
                   }
                   var isArray = Array.isArray(props2[propName]);
                   if (props2.multiple && !isArray) {
-                    error("The `%s` prop supplied to <select> must be an array if `multiple` is true.", propName);
+                    error2("The `%s` prop supplied to <select> must be an array if `multiple` is true.", propName);
                   } else if (!props2.multiple && isArray) {
-                    error("The `%s` prop supplied to <select> must be a scalar value if `multiple` is false.", propName);
+                    error2("The `%s` prop supplied to <select> must be a scalar value if `multiple` is false.", propName);
                   }
                 }
                 if (props2.value !== void 0 && props2.defaultValue !== void 0 && !didWarnDefaultSelectValue) {
-                  error("Select elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both). Decide between using a controlled or uncontrolled select element and remove one of these props. More info: https://reactjs.org/link/controlled-components");
+                  error2("Select elements must be either controlled or uncontrolled (specify either the value prop, or the defaultValue prop, but not both). Decide between using a controlled or uncontrolled select element and remove one of these props. More info: https://reactjs.org/link/controlled-components");
                   didWarnDefaultSelectValue = true;
                 }
               }
@@ -20064,7 +20064,7 @@ var require_uniqueId = __commonJS({
 
 // src/index.jsx
 var import_exec2 = __toModule(require_exec());
-var core2 = __toModule(require_core());
+var core3 = __toModule(require_core());
 var artifact = __toModule(require_artifact_client2());
 var import_react3 = __toModule(require_react());
 var import_server = __toModule(require_server());
@@ -20114,6 +20114,7 @@ function execWithOutput(command2, args) {
 }
 
 // src/process-dir.js
+var core2 = __toModule(require_core());
 var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) => {
   const foldersToIgnore = [".git", ...excludedPaths];
   const fullPathFoldersToIgnore = new Set(foldersToIgnore.map((d2) => nodePath.join(rootPath, d2)));
@@ -20123,27 +20124,30 @@ var processDir = async (rootPath = "", excludedPaths = [], excludedGlobs = []) =
     const size = stats.size;
     const relativePath = path.slice(rootPath.length + 1);
     if (!isFolder) {
-      const jsonLogEntries = await execWithOutput("git", [
-        "log",
-        '--pretty=format:{"hash":"%h", "subject":"%s", "author":"%an", "date":"%ad"}',
-        "--follow",
-        "--",
-        relativePath
-      ]);
-      const fullJson = `[${jsonLogEntries}]`;
-      return {
-        name,
-        path: relativePath,
-        size,
-        commits: JSON.parse(fullJson)
-      };
-    } else {
-      return {
-        name,
-        path: relativePath,
-        size
-      };
+      try {
+        const jsonLogEntries = await execWithOutput("git", [
+          "log",
+          '--pretty=format:{"hash":"%h", "subject":"%s", "author":"%an", "date":"%ad"}',
+          "--follow",
+          "--",
+          relativePath
+        ]);
+        const fullJson = `[${jsonLogEntries}]`;
+        return {
+          name,
+          path: relativePath,
+          size,
+          commits: JSON.parse(fullJson)
+        };
+      } catch (error2) {
+        core2.error(error2);
+      }
     }
+    return {
+      name,
+      path: relativePath,
+      size
+    };
   };
   const addItemToTree = async (path = "", isFolder = true) => {
     try {
@@ -20323,16 +20327,16 @@ function ticks_default(start2, stop, count2) {
   return ticks;
 }
 function tickIncrement(start2, stop, count2) {
-  var step = (stop - start2) / Math.max(0, count2), power = Math.floor(Math.log(step) / Math.LN10), error = step / Math.pow(10, power);
-  return power >= 0 ? (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1) * Math.pow(10, power) : -Math.pow(10, -power) / (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1);
+  var step = (stop - start2) / Math.max(0, count2), power = Math.floor(Math.log(step) / Math.LN10), error2 = step / Math.pow(10, power);
+  return power >= 0 ? (error2 >= e10 ? 10 : error2 >= e5 ? 5 : error2 >= e2 ? 2 : 1) * Math.pow(10, power) : -Math.pow(10, -power) / (error2 >= e10 ? 10 : error2 >= e5 ? 5 : error2 >= e2 ? 2 : 1);
 }
 function tickStep(start2, stop, count2) {
-  var step0 = Math.abs(stop - start2) / Math.max(0, count2), step1 = Math.pow(10, Math.floor(Math.log(step0) / Math.LN10)), error = step0 / step1;
-  if (error >= e10)
+  var step0 = Math.abs(stop - start2) / Math.max(0, count2), step1 = Math.pow(10, Math.floor(Math.log(step0) / Math.LN10)), error2 = step0 / step1;
+  if (error2 >= e10)
     step1 *= 10;
-  else if (error >= e5)
+  else if (error2 >= e5)
     step1 *= 5;
-  else if (error >= e2)
+  else if (error2 >= e2)
     step1 *= 2;
   return stop < start2 ? -step1 : step1;
 }
@@ -27883,8 +27887,8 @@ var getSortOrder = (item, cachedOrders, i = 0) => {
 
 // src/index.jsx
 var main = async () => {
-  core2.info("[INFO] Usage https://github.com/kerry-patrick-il/repo-visualizer#readme");
-  core2.startGroup("Configuration");
+  core3.info("[INFO] Usage https://github.com/kerry-patrick-il/repo-visualizer#readme");
+  core3.startGroup("Configuration");
   const username = "repo-visualizer";
   await (0, import_exec2.exec)("git", ["config", "user.name", username]);
   await (0, import_exec2.exec)("git", [
@@ -27892,17 +27896,17 @@ var main = async () => {
     "user.email",
     `${username}@users.noreply.github.com`
   ]);
-  core2.endGroup();
-  const rootPath = core2.getInput("root_path") || "";
-  const maxDepth = core2.getInput("max_depth") || 9;
-  const customFileColors = JSON.parse(core2.getInput("file_colors") || "{}");
-  const colorEncoding = core2.getInput("color_encoding") || "type";
-  const commitMessage = core2.getInput("commit_message") || "Repo visualizer: update diagram";
-  const excludedPathsString = core2.getInput("excluded_paths") || "node_modules,bower_components,dist,out,build,eject,.next,.netlify,.yarn,.git,.vscode,package-lock.json,yarn.lock";
+  core3.endGroup();
+  const rootPath = core3.getInput("root_path") || "";
+  const maxDepth = core3.getInput("max_depth") || 9;
+  const customFileColors = JSON.parse(core3.getInput("file_colors") || "{}");
+  const colorEncoding = core3.getInput("color_encoding") || "type";
+  const commitMessage = core3.getInput("commit_message") || "Repo visualizer: update diagram";
+  const excludedPathsString = core3.getInput("excluded_paths") || "node_modules,bower_components,dist,out,build,eject,.next,.netlify,.yarn,.git,.vscode,package-lock.json,yarn.lock";
   const excludedPaths = excludedPathsString.split(",").map((str) => str.trim());
-  const excludedGlobsString = core2.getInput("excluded_globs") || "";
+  const excludedGlobsString = core3.getInput("excluded_globs") || "";
   const excludedGlobs = excludedGlobsString.split(";");
-  const branch = core2.getInput("branch");
+  const branch = core3.getInput("branch");
   const data = await processDir(rootPath, excludedPaths, excludedGlobs);
   let doesBranchExist = true;
   if (branch) {
@@ -27911,30 +27915,30 @@ var main = async () => {
       await (0, import_exec2.exec)("git", ["switch", "-c", branch, "--track", `origin/${branch}`]);
     } catch {
       doesBranchExist = false;
-      core2.info(`Branch ${branch} does not yet exist, creating ${branch}.`);
+      core3.info(`Branch ${branch} does not yet exist, creating ${branch}.`);
       await (0, import_exec2.exec)("git", ["checkout", "-b", branch]);
     }
   }
-  core2.info(`data: ${JSON.stringify(data)}`);
+  core3.info(`data: ${JSON.stringify(data)}`);
   const componentCodeString = import_server.default.renderToStaticMarkup(/* @__PURE__ */ import_react3.default.createElement(Tree, {
     data,
     maxDepth: +maxDepth,
     colorEncoding,
     customFileColors
   }));
-  const outputFile = core2.getInput("output_file") || "./diagram.svg";
-  core2.setOutput("svg", componentCodeString);
+  const outputFile = core3.getInput("output_file") || "./diagram.svg";
+  core3.setOutput("svg", componentCodeString);
   await import_fs2.default.writeFileSync(outputFile, componentCodeString);
   await (0, import_exec2.exec)("git", ["add", outputFile]);
   const diff = await execWithOutput("git", ["status", "--porcelain", outputFile]);
-  core2.info(`diff: ${diff}`);
+  core3.info(`diff: ${diff}`);
   if (!diff) {
-    core2.info("[INFO] No changes to the repo detected, exiting");
+    core3.info("[INFO] No changes to the repo detected, exiting");
     return;
   }
-  const shouldPush = core2.getBooleanInput("should_push");
+  const shouldPush = core3.getBooleanInput("should_push");
   if (shouldPush) {
-    core2.startGroup("Commit and push diagram");
+    core3.startGroup("Commit and push diagram");
     await (0, import_exec2.exec)("git", ["commit", "-m", commitMessage]);
     if (doesBranchExist) {
       await (0, import_exec2.exec)("git", ["push"]);
@@ -27944,22 +27948,22 @@ var main = async () => {
     if (branch) {
       await (0, import_exec2.exec)("git", "checkout", "-");
     }
-    core2.endGroup();
+    core3.endGroup();
   }
-  const shouldUpload = core2.getInput("artifact_name") !== "";
+  const shouldUpload = core3.getInput("artifact_name") !== "";
   if (shouldUpload) {
-    core2.startGroup("Upload diagram to artifacts");
+    core3.startGroup("Upload diagram to artifacts");
     const client = artifact.create();
-    const result = await client.uploadArtifact(core2.getInput("artifact_name"), [outputFile], ".");
+    const result = await client.uploadArtifact(core3.getInput("artifact_name"), [outputFile], ".");
     if (result.failedItems.length > 0) {
       throw "Artifact was not uploaded successfully.";
     }
-    core2.endGroup();
+    core3.endGroup();
   }
   console.log("All set!");
 };
 main().catch((e3) => {
-  core2.setFailed(e3);
+  core3.setFailed(e3);
 });
 /*
 object-assign

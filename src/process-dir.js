@@ -2,6 +2,7 @@ import fs from "fs";
 import * as nodePath from "path";
 import { shouldExcludePath } from "./should-exclude-path";
 import { execWithOutput } from "./execWithOutput.jsx";
+import * as core from "@actions/core";
 
 export const processDir = async (
   rootPath = "",
@@ -20,29 +21,32 @@ export const processDir = async (
     const relativePath = path.slice(rootPath.length + 1);
 
     if (!isFolder) {
-      const jsonLogEntries = await execWithOutput("git", [
-        "log",
-        '--pretty=format:{"hash":"%h", "subject":"%s", "author":"%an", "date":"%ad"}',
-        "--follow",
-        "--",
-        relativePath,
-      ]);
+      try {
+        const jsonLogEntries = await execWithOutput("git", [
+          "log",
+          '--pretty=format:{"hash":"%h", "subject":"%s", "author":"%an", "date":"%ad"}',
+          "--follow",
+          "--",
+          relativePath,
+        ]);
 
-      const fullJson = `[${jsonLogEntries}]`;
+        const fullJson = `[${jsonLogEntries}]`;
 
-      return {
-        name,
-        path: relativePath,
-        size,
-        commits: JSON.parse(fullJson),
-      };
-    } else {
-      return {
-        name,
-        path: relativePath,
-        size,
-      };
+        return {
+          name,
+          path: relativePath,
+          size,
+          commits: JSON.parse(fullJson),
+        };
+      } catch (error) {
+        core.error(error);
+      }
     }
+    return {
+      name,
+      path: relativePath,
+      size,
+    };
   };
   const addItemToTree = async (path = "", isFolder = true) => {
     try {
